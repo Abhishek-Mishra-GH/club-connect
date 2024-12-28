@@ -19,7 +19,7 @@ model User {
   email        String         @unique
   password     String
   Registration Registration[]
-  following    Club[]         // optional
+  following    Club[]         @relation("UserFollowing")      // optional
 }
 
 model Club {
@@ -28,7 +28,7 @@ model Club {
   password    String
   name        String
   description String
-  followers   User[]  // optional 
+  followers   User[]  @relation("UserFollowing") // optional 
   events      Event[]  // optional
   posts       Post[]   // optional
 }
