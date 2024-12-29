@@ -28,7 +28,7 @@ model Club {
   password    String
   name        String
   description String
-  followers   User[]  @relation("UserFollowing") // optional 
+  followers User[] @relation("UserFollowing") // optional 
   events      Event[]  // optional
   posts       Post[]   // optional
 }

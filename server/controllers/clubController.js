@@ -29,34 +29,63 @@ exports.getClubById = async (req, res) => {
 
 }
 
+exports.getClubFollowersById = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const club = await prisma.club.findUnique({
+      where: {
+        id: parseInt(id)
+      },
+      include: {
+        followers: true
+      }
+    })
+
+    if (!club) {
+      return res.status(404).json({ message: 'Club not found' });
+    }
+
+    res.status(200).json(club.followers);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch club followers' });
+  }
+}
+
 
 // follow club
 exports.followClub = async (req, res) => {
-  const { userId, clubId } = req.body;
+  let { userId, clubId } = req.body;
 
   if(!userId || !clubId) {
     return res.status(400).json({ message: 'Invalid data' });
   }
 
+  
+  // userId = parseInt(userId);
+  // clubId = parseInt(clubId);
+  
+  console.log(typeof userId, userId)
+
   try {
     await prisma.user.update({
       where: { id: userId },
       data: {
-        clubs: {
+        following: {
           connect: { id: clubId }
         }
       }
     });
 
-    await prisma.club.update({
-      where: { id: clubId },
-      data: {
-        followers: {
-          connect: { id: userId }
-        }
-      }
-    });
+    res.status(201).json({message: `Followed club with id: ${clubId}`, clubId, userId});
+    // await prisma.club.update({
+    //   where: { id: clubId },
+    //   data: {
+    //     followers: {
+    //       connect: { id: userId }
+    //     }
+    //   }
+    // });
   } catch (err) {
-    res.status(500).json({ message: 'Failed to follow club' });
+    res.status(500).json({ message: 'Failed to follow club' , err: err.message});
   }
 }
