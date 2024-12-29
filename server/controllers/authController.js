@@ -69,6 +69,7 @@ exports.login = async (req, res) => {
   }
 };
 
+// register user
 exports.register = async (req, res) => {
   const { email, name, password } = req.body;
 
@@ -95,31 +96,5 @@ exports.register = async (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to register user", error: error.message });
-  }
-};
-
-exports.loginUser = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-    res.status(200).json({ message: "User logged in successfully", token });
-  } catch (error) {
-    res.status(500).json({ message: "Failed to login" });
   }
 };
