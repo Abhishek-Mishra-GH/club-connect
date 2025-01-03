@@ -14,49 +14,51 @@ datasource db {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
+  id           String         @id @default(cuid())
   name         String
+  avatar       String?
   email        String         @unique
   password     String
   Registration Registration[]
-  following    Club[]         @relation("UserFollowing")      // optional
+  following    Club[]         @relation("UserFollowing") // optional
 }
 
 model Club {
-  id          Int     @id @default(autoincrement())
+  id          String  @id @default(cuid())
   email       String  @unique
   password    String
   name        String
   description String
-  followers User[] @relation("UserFollowing") // optional 
-  events      Event[]  // optional
-  posts       Post[]   // optional
+  image       String? // optional
+  followers   User[]  @relation("UserFollowing") // optional 
+  events      Event[] // optional
+  posts       Post[] // optional
 }
 
 model Event {
-  id            Int            @id @default(autoincrement())
-  name         String
+  id            String         @id @default(cuid())
+  name          String
   description   String
   date          DateTime
   location      String
-  clubId        Int
+  clubId        String
   status        String         @default("upcoming")
   registrations Registration[]
   club          Club           @relation(fields: [clubId], references: [id])
 }
 
 model Registration {
-  id      Int    @id @default(autoincrement())
-  userId  Int
-  eventId Int
+  id      String    @id @default(cuid())
+  userId  String
+  eventId String
   user    User   @relation(fields: [userId], references: [id])
   event   Event  @relation(fields: [eventId], references: [id])
 }
 
 model Post {
-  id      Int    @id @default(autoincrement())
+  id      String    @id @default(cuid())
   title   String
   content String
-  clubId  Int
+  clubId  String
   club    Club   @relation(fields: [clubId], references: [id])
 }

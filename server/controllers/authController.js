@@ -38,17 +38,27 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const club = await prisma.club.findUnique({ where: { email } });
+    const club = await prisma.club.findUnique({ 
+      where: { email },
+      include: {
+        followers: true
+      }
+     });
     let user;
 
     if(!club) {
-      user = await prisma.user.findUnique({ where: { email } });
+      user = await prisma.user.findUnique(
+        { where: { email },
+        include: {
+          following: true
+        }
+      });
     }
 
     const entity = club || user;
 
     if (!entity) {
-      return res.status(404).json({ message: 'Club not found' })
+      return res.status(404).json({ message: 'User not found' })
     }
 
     const passwordMatch = await bcrypt.compare(password, entity.password);
@@ -57,10 +67,11 @@ exports.login = async (req, res) => {
     }
 
     // send token that expire in 30 days
-    const token = jwt.sign({ id: entity.id }, process.env.JWT_SECRET, {
-      expiresIn: "30d",
+    const token = jwt.sign({ id: entity.id, name: entity.name }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
     });
 
+    console.log(!!club)
     res.status(200).json({ message: "logged in successfully", token, isClub: !!club, entity });
   } catch (err) {
     res

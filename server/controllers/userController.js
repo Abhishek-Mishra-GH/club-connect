@@ -10,11 +10,12 @@ exports.getAllUsers = async (req, res) => {
 }
 
 exports.getUserById = async (req, res) => {
-  const { id } = req.params
+  const id  = req.params.id
   try {
     const user = await prisma.user.findUnique({
-      where: {
-        id: parseInt(id)
+      where: { id },
+      include: {
+        following: true,
       }
     })
 
@@ -22,7 +23,7 @@ exports.getUserById = async (req, res) => {
       return res.status(404).json({ message: 'User not found'})
     }
     
-    res.status(200).json(user)
+    res.status(200).json({user, isClub: false})
   } catch (error) {
     res.status(500).json({ message: 'Failed to fetch user' })
   }

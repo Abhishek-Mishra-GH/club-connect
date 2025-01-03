@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
@@ -8,6 +9,7 @@ const app = express();
 const PORT = 8080;
 
 app.use(express.json());
+app.use(cors());
 
 app.use((req, res, next) => {
   console.log(`Incoming request to ${req.url}`);
