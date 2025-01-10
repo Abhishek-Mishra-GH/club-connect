@@ -6,12 +6,36 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 
+function CustomLabel({
+  htmlFor,
+  children,
+  className,
+}: {
+  htmlFor: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <label
+      htmlFor={htmlFor}
+      className={twMerge(className, "text-lg font-semibold text-black/70")}
+    >
+      {children}
+    </label>
+  );
+}
+
 export default function page() {
   const [club, setClub] = useState({
     name: "",
     email: "",
     description: "",
+    category: "",
+    memberCount: "",
+    university: "",
+    city: "",
     password: "",
+    founded: "",
   });
 
   const [error, setError] = useState("");
@@ -24,84 +48,205 @@ export default function page() {
     setLoading(true);
 
     // validate password length
-    if(club.password.length < 6) {
+    if (club.password.length < 6) {
       setError("Password must be at least 6 characters long.");
       setLoading(false);
       return;
     }
 
-    const url = "http://localhost:8080/api/auth/register-club";
-    const data = {...club};
-  
-    axios.post(url, data)
-      .then(response => {
+    const backend = process.env.NEXT_PUBLIC_BACKEND_SERVICE;
+    const url = `${backend}/api/auth/register-club`;
+    const data = { ...club };
+
+    axios
+      .post(url, data)
+      .then((response) => {
         router.push("/login");
       })
-      .catch(err => {
-        setError(err.response.data.message ? err.response.data.message : "Something went wrong. Please try again later.");
+      .catch((err) => {
+        setError(
+          err.response.data.message
+            ? err.response.data.message
+            : "Something went wrong. Please try again later."
+        );
       })
       .finally(() => {
         setLoading(false);
-      })
+      });
   };
 
   return (
-    <div className="w-full h-[calc(100vh-60px)] flex justify-center items-center bg-gray-100">
-      <form onSubmit={handleClubRegisterForm} className="flex flex-col gap-3 bg-white border-2 p-4 w-[400px] rounded-lg shadow-md">
-        <input
-        required
-        className="border-2 rounded-sm text-lg px-4 py-2"
-          onChange={(e) => {
-            setClub((prev) => ({ ...prev, name: e.target.value }));
-          }}
-          value={club.name}
-          type="text"
-          id="clubName"
-          placeholder="Name of the club"
-        />
-        <input
-        required
-        className="border-2 rounded-sm text-lg px-4 py-2"
-          onChange={(e) => {
-            setClub((prev) => ({ ...prev, description: e.target.value }));
-          }}
-          value={club.description}
-          type="text"
-          id="clubDescription"
-          placeholder="Description of the club"
-        />
-        <input
-        required
-        className="border-2 rounded-sm text-lg px-4 py-2"
-          onChange={(e) => {
-            setClub((prev) => ({ ...prev, email: e.target.value }));
-          }}
-          value={club.email}
-          type="email"
-          id="clubEmail"
-          placeholder="Club email"
-        />
-        <input
-        required
-        className="border-2 rounded-sm text-lg px-4 py-2"
-          onChange={(e) => {
-            setClub((prev) => ({ ...prev, password: e.target.value }));
-          }}
-          value={club.password}
-          type="password"
-          id="clubPassaword"
-          placeholder="Password"
-        />
-        <p className="text-sm ml-1.5">Already have an account ? <Link href="/login" className="text-blue-400">Login now.</Link></p>
+    <div className="w-full min-h-[calc(100vh-80px)] flex justify-center items-center bg-gray-100">
+      <form
+        onSubmit={handleClubRegisterForm}
+        className="flex flex-col gap-3 bg-white border-2 p-4 w-[400px] rounded-lg shadow-md"
+      >
+        <div>
+          <CustomLabel htmlFor="clubName">Club Name</CustomLabel>
+          <br />
+          <input
+            required
+            name="clubName"
+            className="border-2 rounded-sm text-lg px-4 py-2"
+            onChange={(e) => {
+              setClub((prev) => ({ ...prev, name: e.target.value }));
+            }}
+            value={club.name}
+            type="text"
+            id="clubName"
+            placeholder="ClubConnect"
+          />
+        </div>
+        <div>
+          <CustomLabel htmlFor="university">University</CustomLabel>
+          <br />
+          <input
+            required
+            name="university"
+            className="border-2 rounded-sm text-lg px-4 py-2"
+            onChange={(e) => {
+              setClub((prev) => ({ ...prev, university: e.target.value }));
+            }}
+            value={club.university}
+            type="text"
+            id="clubUniversity"
+            placeholder="Name of the university"
+          />
+        </div>
+        <div>
+          <CustomLabel htmlFor="city">City</CustomLabel>
+          <br />
+          <input
+            required
+            name="city"
+            className="border-2 rounded-sm text-lg px-4 py-2"
+            onChange={(e) => {
+              setClub((prev) => ({ ...prev, city: e.target.value }));
+            }}
+            value={club.city}
+            type="text"
+            id="city"
+            placeholder="Bhopal"
+          />
+        </div>
+        <div>
+          <CustomLabel htmlFor="clubCategory">Category</CustomLabel>
+          <br />
+          <input
+            required
+            name="clubCategory"
+            className="border-2 rounded-sm text-lg px-4 py-2"
+            onChange={(e) => {
+              setClub((prev) => ({ ...prev, category: e.target.value }));
+            }}
+            value={club.category}
+            type="text"
+            id="clubCategory"
+            placeholder="Coding"
+          />
+        </div>
+        <div>
+          <CustomLabel htmlFor="clubDescription">Description</CustomLabel>
+          <br />
+          <textarea
+            required
+            name="clubDescription"
+            className="border-2 rounded-sm text-lg px-4 py-2"
+            onChange={(e) => {
+              setClub((prev) => ({ ...prev, description: e.target.value }));
+            }}
+            value={club.description}
+            id="clubDescription"
+            placeholder="Official club of ClubConnect"
+          />
+        </div>
+        {/* other details */}
+        <div>
+          <CustomLabel htmlFor="founded">Founded In</CustomLabel>
+          <br />
+          <input
+            required
+            name="founded"
+            className="border-2 rounded-sm text-lg px-4 py-2"
+            onChange={(e) => {
+              setClub((prev) => ({ ...prev, founded: e.target.value }));
+            }}
+            value={club.founded}
+            type="number"
+            id="founded"
+            placeholder="2025"
+          />
+        </div>
+
+        <div>
+          <CustomLabel htmlFor="totalMembers">Total Members</CustomLabel>
+          <br />
+          <input
+            required
+            name="totalmembers"
+            className="border-2 rounded-sm text-lg px-4 py-2"
+            onChange={(e) => {
+              setClub((prev) => ({ ...prev, memberCount: e.target.value }));
+            }}
+            value={club.memberCount}
+            type="number"
+            id="memberCount"
+            placeholder="25"
+          />
+        </div>
+            
+        {/* other details */}
+        <div>
+          <CustomLabel htmlFor="clubEmail">Club Email</CustomLabel>
+          <br />
+          <input
+            required
+            name="clubEmail"
+            className="border-2 rounded-sm text-lg px-4 py-2"
+            onChange={(e) => {
+              setClub((prev) => ({ ...prev, email: e.target.value }));
+            }}
+            value={club.email}
+            type="email"
+            id="clubEmail"
+            placeholder="Club email"
+          />
+        </div>
+        <div>
+          <CustomLabel htmlFor="clubPassword">Password</CustomLabel>
+          <br />
+          <input
+            required
+            name="clubPassword"
+            className="border-2 rounded-sm text-lg px-4 py-2"
+            onChange={(e) => {
+              setClub((prev) => ({ ...prev, password: e.target.value }));
+            }}
+            value={club.password}
+            type="password"
+            id="clubPassaword"
+            placeholder="Password"
+          />
+        </div>
+        <p className="text-sm ml-1.5">
+          Already have an account ?{" "}
+          <Link href="/login" className="text-blue-400">
+            Login now.
+          </Link>
+        </p>
 
         {error && <p className="text-red-500 text-sm">* {error}</p>}
 
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           disabled={loading}
-          className={twMerge("border-2 rounded-lg px-4 py-2 text-white bg-black hover:bg-gray-700", loading && "bg-gray-700")}
-          
-        >Register</button>
+          className={twMerge(
+            "border-2 rounded-lg px-4 py-2 text-white bg-black hover:bg-gray-700",
+            loading && "bg-gray-700"
+          )}
+        >
+          Register
+        </button>
       </form>
     </div>
   );

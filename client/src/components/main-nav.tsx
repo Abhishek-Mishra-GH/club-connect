@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { clubAtom, userAtom } from "@/store/useStore";
+import { clubAtom, userAtom, followedClubsAtom } from "@/store/useStore";
 import { useAtom } from "jotai";
 import Search from "./Search";
 import NavLink from "./NavLink";
@@ -16,6 +16,7 @@ import { motion } from "framer-motion"
 export function MainNav() {
   const [user, setUser] = useAtom(userAtom);
   const [club, setClub] = useAtom(clubAtom);
+  const [followedClubs, setFollowedClubs] = useAtom(followedClubsAtom);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   let entity = user ? user : club;
@@ -58,6 +59,7 @@ export function MainNav() {
               onClick={() => {
                 setUser(null);
                 setClub(null);
+                setFollowedClubs(null);
                 localStorage.removeItem("token");
                 localStorage.removeItem("isClub");
               }}

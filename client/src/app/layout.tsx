@@ -4,7 +4,7 @@ import { Condiment, Inter } from "next/font/google";
 import "./globals.css";
 import { MainNav } from "@/components/main-nav";
 import { useAtom } from "jotai";
-import { clubAtom, userAtom } from "@/store/useStore";
+import { clubAtom, userAtom, followedClubsAtom } from "@/store/useStore";
 import axios from "axios";
 import { useEffect } from "react";
 
@@ -17,16 +17,18 @@ export default function RootLayout({
 }) {
   const [ user, setUser] = useAtom(userAtom);
   const [ club, setClub] = useAtom(clubAtom);
+  const [ followedClubs, setFollowedClubs] = useAtom(followedClubsAtom);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const isClub = localStorage.getItem("isClub") === "true" ? true : false;
 
     if (token && !user && !club) {
-      const url1 = "http://localhost:8080/api/clubs/jwt";
-      const url2 = "http://localhost:8080/api/users/jwt";
-
+      const backend = process.env.NEXT_PUBLIC_BACKEND_SERVICE;
+      const url1 = `${backend}/api/clubs/jwt`;
+      const url2 = `${backend}/api/users/jwt`;
       const url = isClub ? url1 : url2;
+
       const config = {
         headers: {
           Authorization: `Bearer ${token}`
@@ -44,7 +46,11 @@ export default function RootLayout({
               name: entity.name,
               email: entity.email,
               avatar: entity.avatar,
+              university: entity.university,
+              city: entity.city,
             });
+
+            setFollowedClubs(entity.following);
           } else if(isClub){
             setClub({
               id: entity.id,
@@ -53,6 +59,11 @@ export default function RootLayout({
               description: entity.description,
               avatar: entity.image,
               numFollowers: entity.followers.length,
+              university: entity.university,
+              memberCount: entity.memberCount,
+              founded: entity.founded,
+              category: entity.category,
+              city: entity.city
             }); 
           }
           

@@ -11,7 +11,8 @@ model User {
   id           String         @id @default(cuid())
   name         String
   avatar       String?
-  college      String?
+  university   String
+  city         String
   email        String         @unique
   password     String
   Registration Registration[]
@@ -19,16 +20,20 @@ model User {
 }
 
 model Club {
-  id          String  @id @default(cuid())
-  email       String  @unique
-  password    String
-  name        String
-  college     String?
-  description String
-  image       String? // optional
-  followers   User[]  @relation("UserFollowing") // optional 
-  events      Event[] // optional
-  posts       Post[] // optional
+  id              String  @id @default(cuid())
+  email           String  @unique
+  password        String
+  name            String
+  university      String
+  founded         Int
+  city            String
+  description     String
+  category        String
+  memberCount     Int
+  logo            String? // optional
+  followers       User[]  @relation("UserFollowing") // optional 
+  events          Event[] // optional
+  posts           Post[] // optional
 }
 
 model Event {

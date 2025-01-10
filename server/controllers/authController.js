@@ -4,7 +4,9 @@ const jwt = require("jsonwebtoken");
 
 // register club
 exports.registerClub = async (req, res) => {
-  const { name, email, password, description } = req.body;
+  const clubData = req.body;
+  const email = clubData.email;
+  const password = clubData.password;
 
     // check if email already exists in user or club table
     const user = await prisma.user.findUnique({ where: { email } });
@@ -18,15 +20,16 @@ exports.registerClub = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const club = await prisma.club.create({
       data: {
-        email,
-        name,
-        description,
+        ...clubData,
+        memberCount: parseInt(clubData.memberCount),
+        founded: parseInt(clubData.founded),
         password: hashedPassword,
       },
     });
 
     res.status(201).json({ message: "Club registered successfully", club });
   } catch (err) {
+    // console.log(err)
     res
       .status(500)
       .json({ message: "Failed to register club", error: err.message });

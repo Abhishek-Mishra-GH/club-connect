@@ -8,7 +8,7 @@ import Image from "next/image"
 export default function Home() {
 
   return (
-    <div className="flex-1 mt-20">
+    <div className="flex-1">
       <section className="w-full sm:min-h-screen py-12 md:py-24 lg:py-32 xl:py-48 flex justify-center">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center space-y-4 text-center">
@@ -22,7 +22,7 @@ export default function Home() {
             </div>
             <div className="sm:space-x-4 sm:inline-block flex flex-col space-y-4 ">
               <Button size="lg">Browse Clubs</Button>
-              <Button variant="outline" size="lg" className="w-full">
+              <Button variant="outline" size="lg" className="w-full sm:w-auto">
                 Explore Events
               </Button>
             </div>
