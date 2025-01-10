@@ -1,0 +1,148 @@
+"use client";
+
+import React, { useState } from "react";
+import { useAtom } from "jotai";
+import { clubAtom } from "@/store/useStore";
+import { twMerge } from "tailwind-merge";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+
+export default function page() {
+  const [club, setClub] = useAtom(clubAtom);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const [event, setEvent] = useState({
+    name: "",
+    description: "",
+    location: "",
+    date: "",
+    time: "12:00",
+    clubId: club?.id,
+  });
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
+    e.preventDefault();
+    setLoading(true);
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/api/events`;
+
+    const isoDateTime = new Date(`${event.date}T${event.time}:00`);
+
+    const data = {
+      name: event.name,
+      description: event.description,
+      location: event.location,
+      clubId: event.clubId,
+      date: isoDateTime,
+    };
+
+    axios
+      .post(url, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        router.push("/profile");
+      })
+      .catch((err) => {
+        console.log(err.response);
+        setError(err.response.data.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  return (
+    <div className="h-[calc(100vh-80px)]">
+      <h1 className="text-3xl text-center text-black font-semibold my-6">
+        Create Event
+      </h1>
+      <form
+        onSubmit={(e) => handleSubmit(e)}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-3 w-[380px] sm:w-[450px] max-w-screen border-2 border-black backdrop:blur-md shadow-xl rounded-md sm:p-4 p-2"
+      >
+        <input
+          required
+          type="text"
+          value={event?.name}
+          placeholder="Event name"
+          className="border-2 rounded-sm text-lg px-4 py-2"
+          onChange={(e) => {
+            setEvent({ ...event, name: e.target.value });
+          }}
+        />
+
+        <input
+          required
+          className="border-2 rounded-sm text-lg px-4 py-2"
+          type="text"
+          value={event.description}
+          placeholder="Description"
+          onChange={(e) => {
+            setEvent({ ...event, description: e.target.value });
+          }}
+        />
+
+        <input
+          required
+          className="border-2 rounded-sm text-lg px-4 py-2"
+          type="text"
+          value={event.location}
+          placeholder="Location"
+          onChange={(e) => {
+            setEvent({ ...event, location: e.target.value });
+          }}
+        />
+
+        <div className="flex items-center gap-3 px-2">
+        <label htmlFor="eventDate" className="text-lg">Date:{" "}</label>
+        <input
+          required
+          className="border-2 rounded-sm text-lg px-2 flex-1 py-1"
+          type="Date"
+          name="eventDate"
+          id="eventDate"
+          value={event.date}
+          onChange={(e) => {
+            setEvent({ ...event, date: e.target.value });
+            console.log(typeof event.date, event.date);
+          }}
+        />
+        </div>
+
+        <div className="flex items-center gap-3 p-2">
+          <label htmlFor="eventTime" className="text-lg">
+            Time:{" "}
+          </label>
+          <input
+            required
+            className="border-2 rounded-sm text-lg px-2 flex-1 py-1"
+            type="Time"
+            value={event.time}
+            name="eventTime"
+            id="eventTime"
+            onChange={(e) => {
+              setEvent({ ...event, time: e.target.value });
+            }}
+          />
+        </div>
+
+        {error && <p className="text-red-500">* {error}</p>}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className={twMerge(
+            "border-2 rounded-lg px-4 py-2 text-white bg-black hover:bg-gray-700",
+            loading && "bg-gray-700"
+          )}
+        >
+          Create Event
+        </button>
+      </form>
+    </div>
+  );
+}

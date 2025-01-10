@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String         @id @default(cuid())
+  name         String
+  avatar       String?
+  college      String?
+  email        String         @unique
+  password     String
+  Registration Registration[]
+  following    Club[]         @relation("UserFollowing") // optional
+}
+
+model Club {
+  id          String  @id @default(cuid())
+  email       String  @unique
+  password    String
+  name        String
+  college     String?
+  description String
+  image       String? // optional
+  followers   User[]  @relation("UserFollowing") // optional 
+  events      Event[] // optional
+  posts       Post[] // optional
+}
+
+model Event {
+  id            String         @id @default(cuid())
+  name          String
+  description   String
+  image         String
+  date          DateTime
+  location      String
+  clubId        String
+  status        String         @default("upcoming")
+  registrations Registration[]
+  club          Club           @relation(fields: [clubId], references: [id])
+}
+
+model Registration {
+  id      String @id @default(cuid())
+  userId  String
+  eventId String
+  user    User   @relation(fields: [userId], references: [id])
+  event   Event  @relation(fields: [eventId], references: [id])
+}
+
+model Post {
+  id      String @id @default(cuid())
+  title   String
+  content String
+  clubId  String
+  club    Club   @relation(fields: [clubId], references: [id])
+}
