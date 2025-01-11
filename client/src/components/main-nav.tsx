@@ -29,8 +29,8 @@ export function MainNav() {
             <span className=" font-bold text-lg inline-block">ClubConnect</span>
           </Link>
           <nav className="hidden sm:flex items-center space-x-6 text-lg font-medium">
-            <NavLink href="/clubs">Clubs</NavLink>
             <NavLink href="/events">Events</NavLink>
+            <NavLink href="/clubs">Clubs</NavLink>
           </nav>
         </div>
         <div className="hidden sm:flex flex-1 items-center justify-end space-x-4 ">

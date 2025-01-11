@@ -78,7 +78,7 @@ const Search: React.FC = () => {
                   <div>
                     <ul className="flex flex-col gap-3">
                       {results.clubs.map((club: any) => (
-                        <Link href="/profile" key={club.id}>
+                        <Link href={`/clubs/${club.id}`} key={club.id}>
                         <li className="border-b bg-white shadow-md border border-gray-200 text-lg text-gray-900 rounded-md px-3 py-2 flex items-center gap-3">
                           <div className="h-10 w-10 flex justify-center items-center rounded-full bg-gray-300">{club.name[0]}</div>
                           <h3>{club.name}</h3>
