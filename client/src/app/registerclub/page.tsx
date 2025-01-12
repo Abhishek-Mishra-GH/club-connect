@@ -5,25 +5,9 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
+import CustomLabel from "@/components/CustomLabel";
 
-function CustomLabel({
-  htmlFor,
-  children,
-  className,
-}: {
-  htmlFor: string;
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <label
-      htmlFor={htmlFor}
-      className={twMerge(className, "text-lg font-semibold text-black/70")}
-    >
-      {children}
-    </label>
-  );
-}
+
 
 export default function page() {
   const [club, setClub] = useState({
@@ -81,7 +65,7 @@ export default function page() {
         onSubmit={handleClubRegisterForm}
         className="flex flex-col gap-3 bg-white border-2 p-4 w-[400px] rounded-lg shadow-md"
       >
-        <div>
+        <div className="w-full flex flex-col">
           <CustomLabel htmlFor="clubName">Club Name</CustomLabel>
           <br />
           <input
@@ -97,7 +81,7 @@ export default function page() {
             placeholder="ClubConnect"
           />
         </div>
-        <div>
+        <div className="w-full flex flex-col">
           <CustomLabel htmlFor="university">University</CustomLabel>
           <br />
           <input
@@ -113,7 +97,7 @@ export default function page() {
             placeholder="Name of the university"
           />
         </div>
-        <div>
+        <div className="w-full flex flex-col">
           <CustomLabel htmlFor="city">City</CustomLabel>
           <br />
           <input
@@ -129,7 +113,7 @@ export default function page() {
             placeholder="Bhopal"
           />
         </div>
-        <div>
+        <div className="w-full flex flex-col">
           <CustomLabel htmlFor="clubCategory">Category</CustomLabel>
           <br />
           <input
@@ -145,7 +129,7 @@ export default function page() {
             placeholder="Coding"
           />
         </div>
-        <div>
+        <div className="w-full flex flex-col">
           <CustomLabel htmlFor="clubDescription">Description</CustomLabel>
           <br />
           <textarea
@@ -161,7 +145,7 @@ export default function page() {
           />
         </div>
         {/* other details */}
-        <div>
+        <div className="w-full flex flex-col">
           <CustomLabel htmlFor="founded">Founded In</CustomLabel>
           <br />
           <input
@@ -178,7 +162,7 @@ export default function page() {
           />
         </div>
 
-        <div>
+        <div className="w-full flex flex-col">
           <CustomLabel htmlFor="totalMembers">Total Members</CustomLabel>
           <br />
           <input
@@ -196,7 +180,7 @@ export default function page() {
         </div>
             
         {/* other details */}
-        <div>
+        <div className="w-full flex flex-col">
           <CustomLabel htmlFor="clubEmail">Club Email</CustomLabel>
           <br />
           <input
@@ -212,7 +196,7 @@ export default function page() {
             placeholder="Club email"
           />
         </div>
-        <div>
+        <div className="w-full flex flex-col">
           <CustomLabel htmlFor="clubPassword">Password</CustomLabel>
           <br />
           <input

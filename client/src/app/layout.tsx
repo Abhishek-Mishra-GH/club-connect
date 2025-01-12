@@ -49,7 +49,7 @@ export default function RootLayout({
               university: entity.university,
               city: entity.city,
             });
-
+            localStorage.setItem('userid', entity.id);
             setFollowedClubs(entity.following);
           } else if(isClub){
             setClub({

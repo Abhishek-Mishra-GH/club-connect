@@ -6,20 +6,12 @@ import { MemberAvatar } from "@/components/member-avatar"
 import { Club, ClubEvent, ClubMember } from "@/types/club"
 import { BadgeCheck, CalendarDays, Users } from 'lucide-react'
 import FollowClubBtn from "@/components/FollowClubBtn"
+import { useEffect, useState } from "react"
+import { useParams } from "next/navigation"
+import axios from "axios"
+import { useAtom } from "jotai"
+import { followedClubsAtom } from "@/store/useStore"
 
-// Sample data
-const clubData: Club = {
-  id: "1",
-  name: "Computer Science Society",
-  numFollowers: 23,
-  description: "A community of tech enthusiasts and future innovators. We organize workshops, hackathons, and networking events to help students explore the world of technology and connect with industry professionals.",
-  category: "Technology",
-  memberCount: 156,
-  university: "State University",
-  founded: 2015,
-  coverImage: "/placeholder.svg?height=400&width=1200",
-  logo: "/placeholder.svg?height=100&width=100"
-}
 
 const events: ClubEvent[] = [
   {
@@ -28,7 +20,8 @@ const events: ClubEvent[] = [
     date: new Date("2024-03-15"),
     location: "University Tech Center",
     description: "24-hour coding challenge with amazing prizes and opportunities to network with industry professionals.",
-    image: "/placeholder.svg?height=200&width=400"
+    image: "/placeholder.svg?height=200&width=400",
+    numRegistered: 35
   },
   {
     id: "2",
@@ -36,7 +29,8 @@ const events: ClubEvent[] = [
     date: new Date("2024-02-20"),
     location: "Computer Science Building, Room 101",
     description: "Learn the basics of web development with React and Next.js. Perfect for beginners!",
-    image: "/placeholder.svg?height=200&width=400"
+    image: "/placeholder.svg?height=200&width=400",
+    numRegistered: 45
   },
   {
     id: "3",
@@ -44,7 +38,8 @@ const events: ClubEvent[] = [
     date: new Date("2024-02-28"),
     location: "Virtual Event",
     description: "Join us for an insightful discussion with tech industry leaders about career opportunities and industry trends.",
-    image: "/placeholder.svg?height=200&width=400"
+    image: "/placeholder.svg?height=200&width=400",
+    numRegistered: 67
   }
 ]
 
@@ -76,8 +71,60 @@ const members: ClubMember[] = [
 ]
 
 export default function page() {
+  const [clubData, setClubData] = useState<Club>({
+    name: "",
+    description: "",
+    numFollowers: 0,
+    city: "",
+    memberCount: 0,
+    university: "",
+    founded: 0,
+    id: "",
+    email: "",
+    category: "",
+    avatar: "",
+  });
+  const [followedClubs, setFollowedClubs] = useAtom(followedClubsAtom);
+  const [following, setFollowing] = useState(false);
+  const { clubid } = useParams();
+
+  const incrFollow = () => {
+    const newFollowers = clubData?.numFollowers + 1;
+    setClubData({...clubData, numFollowers: newFollowers});
+  }
+
+  const descrFollow = () => {
+    const newFollowers = clubData?.numFollowers - 1;
+    setClubData({...clubData, numFollowers: newFollowers});
+  }
+
+  useEffect(() => {
+    const userid = localStorage.getItem("userid");
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/api/clubs/${clubid}/${userid}`
+
+    axios.get(url)
+      .then(response => {
+        const cdata = response.data.club;
+        setClubData({
+          id: cdata.id,
+          name: cdata.name,
+          description: cdata.description,
+          email: cdata.email,
+          category: cdata.category,
+          memberCount: cdata.memberCount,
+          numFollowers: cdata.followers.length,
+          university: cdata.university,
+          city: cdata.city,
+          founded: cdata.founded,
+          avatar: cdata.avatar,
+        })
+
+        setFollowing(response.data.followed);
+      })
+  } ,[]);
 
   return (
+    
     <div className="min-h-screen bg-background mt-2">
       {/* Hero Section */}
       <div className="relative container mx-auto rounded-lg backdrop:blur-md shadow-md mb-2 mt-4 px-2 sm:px-4 py-4 border-2">
@@ -91,13 +138,13 @@ export default function page() {
             C
           </div>
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-black mb-1">{clubData.name}</h1>
-            <h3 className="text-black/95 text-xl">{clubData.university}</h3>
-            <p className="text-black/70 font-bold">{clubData.numFollowers + " "} Followers</p>
+            <h1 className="text-3xl font-bold text-black mb-1">{clubData?.name}</h1>
+            <h3 className="text-black/95 text-xl">{clubData?.university}</h3>
+            <p className="text-black/70 font-bold">{clubData?.numFollowers ? (clubData.numFollowers + " Followers") : "0 Followers"} </p>
           </div>
 
           <div>
-            <FollowClubBtn clubId={clubData.id} />
+            <FollowClubBtn incrFollow={incrFollow} decrFollow={descrFollow} setFollowing={setFollowing} following={following} clubId={clubData ? clubData.id : ""} />
           </div>
         </div>
       </div>
@@ -109,7 +156,7 @@ export default function page() {
           <div className="lg:col-span-2 space-y-8">
             <div className="prose dark:prose-invert">
               <h2 className="text-2xl font-bold">About Us</h2>
-              <p>{clubData.description}</p>
+              <p>{clubData?.description}</p>
             </div>
 
             <div>
@@ -140,15 +187,15 @@ export default function page() {
                   <div className="flex items-center gap-4">
                     <Users className="h-5 w-5 text-muted-foreground" />
                     <div>
-                      <p className="text-sm font-medium leading-none">{clubData.memberCount} Members</p>
+                      <p className="text-sm font-medium leading-none">{clubData?.memberCount} Members</p>
                       <p className="text-sm text-muted-foreground">Active community</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
                     <CalendarDays className="h-5 w-5 text-muted-foreground" />
                     <div>
-                      <p className="text-sm font-medium leading-none">Founded {clubData.founded}</p>
-                      <p className="text-sm text-muted-foreground">{new Date().getFullYear() - clubData.founded} years of excellence</p>
+                      <p className="text-sm font-medium leading-none">Founded {clubData?.founded}</p>
+                      <p className="text-sm text-muted-foreground">{new Date().getFullYear() - (clubData ? clubData.founded : 0)} years of excellence</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">

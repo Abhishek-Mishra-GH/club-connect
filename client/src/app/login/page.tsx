@@ -40,16 +40,25 @@ export default function page() {
             name: entity.name,
             email: entity.email,
             avatar: entity.avatar,
+            university: entity.university,
+            city: entity.city
           });
+
+          localStorage.setItem("userid", entity.id);
         } else {
-          setClub({
-            id: entity.id,
-            name: entity.name,
-            email: entity.email,
-            description: entity.description,
-            avatar: entity.image,
-            numFollowers: entity.followers.length,
-          });
+          const {password, ...clubFromResp} = entity;
+          // setClub({
+          //   id: entity.id,
+          //   name: entity.name,
+          //   email: entity.email,
+          //   description: entity.description,
+          //   avatar: entity.image,
+          //   numFollowers: entity.followers.length,
+          //   memberCount: entity.memberCount,
+          //   category: entity.category,
+
+          // });
+          setClub({...clubFromResp});
         }
 
         router.push("/");

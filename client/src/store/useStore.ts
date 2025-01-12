@@ -40,6 +40,6 @@ interface IsClub {
 export const isClubAtom = atom<IsClub | null>(null);
 export const userAtom = atom<User | null>(null);
 export const clubAtom = atom<Club | null>(null);
-export const followedClubsAtom = atom<Club[] | null>([]);
+export const followedClubsAtom = atom<Club[]>([]);
 export const registeredEventsAtom = atom<Event[]>([]);
 

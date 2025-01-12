@@ -59,9 +59,10 @@ export function MainNav() {
               onClick={() => {
                 setUser(null);
                 setClub(null);
-                setFollowedClubs(null);
+                setFollowedClubs([]);
                 localStorage.removeItem("token");
                 localStorage.removeItem("isClub");
+                localStorage.removeItem("userid");
               }}
             >
               Logout

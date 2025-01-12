@@ -27,5 +27,6 @@ export interface Club {
   city: string
   founded: number
   avatar: string
+  password?: string
 }
 

@@ -85,7 +85,7 @@ exports.login = async (req, res) => {
 
 // register user
 exports.register = async (req, res) => {
-  const { email, name, password } = req.body;
+  const { email, name, password, university, city } = req.body;
 
   // check if email already exists in user or club table
   const user = await prisma.user.findUnique({ where: { email } });
@@ -101,6 +101,8 @@ exports.register = async (req, res) => {
       data: {
         email,
         name,
+        university,
+        city,
         password: hashedPassword,
       },
     });
