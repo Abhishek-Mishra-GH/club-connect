@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 import CustomLabel from "@/components/CustomLabel";
+import { Button } from "@/components/ui/button";
 
 
 
@@ -63,7 +64,7 @@ export default function page() {
     <div className="w-full min-h-[calc(100vh-80px)] flex justify-center items-center bg-gray-100">
       <form
         onSubmit={handleClubRegisterForm}
-        className="flex flex-col gap-3 bg-white border-2 p-4 w-[400px] rounded-lg shadow-md"
+        className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-white border-2 p-4 min-w-[380px] rounded-lg shadow-md"
       >
         <div className="w-full flex flex-col">
           <CustomLabel htmlFor="clubName">Club Name</CustomLabel>
@@ -129,13 +130,13 @@ export default function page() {
             placeholder="Coding"
           />
         </div>
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col col-span-2">
           <CustomLabel htmlFor="clubDescription">Description</CustomLabel>
           <br />
           <textarea
             required
             name="clubDescription"
-            className="border-2 rounded-sm text-lg px-4 py-2"
+            className="border-2 rounded-sm text-lg px-4 py-2 "
             onChange={(e) => {
               setClub((prev) => ({ ...prev, description: e.target.value }));
             }}
@@ -212,6 +213,8 @@ export default function page() {
             placeholder="Password"
           />
         </div>
+        
+        <div className="col-span-2">
         <p className="text-sm ml-1.5">
           Already have an account ?{" "}
           <Link href="/login" className="text-blue-400">
@@ -220,17 +223,19 @@ export default function page() {
         </p>
 
         {error && <p className="text-red-500 text-sm">* {error}</p>}
+        </div>
 
-        <button
+        <Button
           type="submit"
           disabled={loading}
+          size="lg"
           className={twMerge(
-            "border-2 rounded-lg px-4 py-2 text-white bg-black hover:bg-gray-700",
+            "border-2 rounded-lg px-6 py-6 col-span-2 text-lg",
             loading && "bg-gray-700"
           )}
         >
           Register
-        </button>
+        </Button>
       </form>
     </div>
   );

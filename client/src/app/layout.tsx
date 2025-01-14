@@ -8,6 +8,7 @@ import { clubAtom, userAtom, followedClubsAtom } from "@/store/useStore";
 import axios from "axios";
 import { useEffect } from "react";
 import isCurrentUserClub from "@/utils/isCurrentUserClub";
+import { Footer } from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -91,6 +92,7 @@ export default function RootLayout({
           <div className="flex min-h-screen flex-col">
             <MainNav />
             <main className="flex-1">{children}</main>
+            <Footer/>
           </div>
       </body>
     </html>

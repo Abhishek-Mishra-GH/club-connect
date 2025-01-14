@@ -25,7 +25,7 @@ export default function EventsPage() {
     // check configs
 
     if(!localStorage.getItem("token")) {
-      router.push('/login');
+      router.push('/register');
     }
 
     // load events

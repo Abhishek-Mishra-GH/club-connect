@@ -22,7 +22,7 @@ export function MainNav() {
   let entity = user ? user : club;
 
   return (
-    <header className="sticky top-0 z-50  flex justify-center items-center w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50  flex justify-center items-center w-full border-b bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
       <div className="container flex h-16 sm:h-20 items-center mx-2 sm:mx-8">
         <div className="mr-4 flex">
           <Link className="mr-6 flex items-center space-x-2" href="/">
