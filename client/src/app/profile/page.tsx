@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import ClubAccount from "@/components/ClubAccount"
 import UserAccount from "@/components/UserAccount";
@@ -16,6 +16,6 @@ export default function page() {
   if(isClub) {
     return <ClubAccount />
   } else {
-    <UserAccount />
+    return <UserAccount />
   }
 }
