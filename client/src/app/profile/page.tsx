@@ -2,14 +2,14 @@
 
 import ClubAccount from "@/components/ClubAccount"
 import UserAccount from "@/components/UserAccount";
-import isCurrentUserClub from "@/utils/isCurrentUserClub"
+import isCurrentUserClub from "@/utils/isCurrentUserClub";
 import React, { useEffect, useState } from 'react'
 
 export default function page() {
   const [isClub, setIsClub] = useState(false);
 
   useEffect(() => {
-    const clubStatus = localStorage.getItem("isClub") === "true";
+    const clubStatus = isCurrentUserClub();
     setIsClub(clubStatus);
   }, []);
 
@@ -19,3 +19,5 @@ export default function page() {
     return <UserAccount />
   }
 }
+
+export const dynamic = "force-dynamic";
