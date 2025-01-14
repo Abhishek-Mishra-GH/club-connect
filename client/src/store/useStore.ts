@@ -29,7 +29,7 @@ interface IsClub {
 // Jotai Atoms
 export const isClubAtom = atom<IsClub | null>(null);
 export const userAtom = atom<User | null>(null);
-export const clubAtom = atom<Club>();
+export const clubAtom = atom<Club | null>();
 export const followedClubsAtom = atom<Club[]>([]);
 export const registeredEventsAtom = atom<Event[]>([]);
 
