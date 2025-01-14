@@ -1,3 +1,6 @@
 export default function isCurrentUserClub() {
-  return localStorage.getItem("isClub") === "true" ? true : false;
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("isClub") === "true";
+  }
+  return false; 
 }
