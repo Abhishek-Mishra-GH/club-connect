@@ -12,6 +12,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { MdClose } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
 import { motion } from "framer-motion"
+import Logout from "./Logout";
 
 export function MainNav() {
   const [user, setUser] = useAtom(userAtom);
@@ -55,22 +56,7 @@ export function MainNav() {
             </Link>
           )}
           {entity ? (
-            <Button
-              className="bg-white text-black rounded-md border-2 border-black hover:border-red-600 hover:bg-white hover:text-red-600"
-              onClick={() => {
-                setUser(null);
-                setClub(null);
-                setFollowedClubs([]);
-                localStorage.removeItem("token");
-                localStorage.removeItem("isClub");
-                localStorage.removeItem("userid");
-                localStorage.removeItem("clubid");
-                localStorage.removeItem("clubdata");
-                localStorage.removeItem("userdata");
-              }}
-            >
-              Logout
-            </Button>
+            <Logout />
           ) : (
             ""
           )}

@@ -16,7 +16,7 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
   return (
     <button
       type="submit" // Ensure it's a submit button for the form
-      className={`relative flex items-center justify-center px-6 py-2 text-white bg-black rounded-md shadow-md hover:bg-gray-700 ${
+      className={`relative flex items-center justify-center px-6 py-2 text-white bg-cyan-600 rounded-md shadow-md hover:bg-cyan-700 ${
         isLoading || disabled ? "cursor-not-allowed opacity-70" : ""
       }`}
       disabled={isLoading || disabled}

@@ -90,14 +90,14 @@ export default function page() {
             className="border-2 rounded-sm px-4 py-2 text-lg"
             type="email"
             id="email"
-            placeholder="email"
+            placeholder="Email"
           />
           <input
           required
             className="border-2 rounded-sm px-4 py-2 text-lg"
             type="password"
             id="password"
-            placeholder="password"
+            placeholder="Password"
           />
           <p className="text-sm ml-1.5">Don't have an account ? <Link href="/register" className="text-blue-400">Register now.</Link></p>
           {/* <button id="loginBtn" className="border-2 rounded-sm p-2 text-white bg-black">Login</button> */}

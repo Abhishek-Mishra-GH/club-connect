@@ -8,28 +8,30 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { ImagePlus, Upload, X } from "lucide-react";
-import { Club } from "@/types/club";
 import { Event } from "@/types/event";
 import { fetchEventsByClubId } from "@/utils/fetchEventsByClubId";
 import { EventCard } from "./event-card";
 import Link from "next/link";
+import { clubAtom } from "@/store/useStore";
+import { useAtom } from "jotai";
 
 // Sample data - replace with actual data fetching
-const clubData: Partial<Club> = {
-  id: "1",
-  name: "Computer Science Society",
-  description: "A community of tech enthusiasts and future innovators.",
-  category: "Technology",
-  memberCount: 156,
-  university: "State University",
-  founded: 2015,
-  avatar: "/placeholder.svg?height=100&width=100",
-};
+// const clubData: Partial<Club> = {
+//   id: "1",
+//   name: "Computer Science Society",
+//   description: "A community of tech enthusiasts and future innovators.",
+//   category: "Technology",
+//   memberCount: 156,
+//   university: "State University",
+//   founded: 2015,
+//   avatar: "/placeholder.svg?height=100&width=100",
+// };
 
 export default function ClubProfilePage() {
   const [gallery, setGallery] = useState<string[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const [club, setClub] = useAtom(clubAtom);
 
   useEffect(() => {
     const loadEvents = async () => {
@@ -88,26 +90,56 @@ export default function ClubProfilePage() {
                 <form className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Club Name</Label>
-                    <Input id="name" defaultValue={clubData.name} />
+                    <Input id="name" defaultValue={club?.name} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Club Logo</Label>
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={club?.avatar}
+                        alt="Logo"
+                        className="w-24 h-24 object-cover rounded-lg  border-2 border-Black"
+                      />
+                      <Button variant="outline" size="icon">
+                        <ImagePlus className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="description">Description</Label>
                     <Textarea
                       id="description"
-                      defaultValue={clubData.description}
+                      defaultValue={club?.description}
                     />
                   </div>
                   <div className="grid gap-4 md:grid-cols-2">
-                    <div className="space-y-2">
+                  <div className="space-y-2">
                       <Label htmlFor="category">Category</Label>
-                      <Input id="category" defaultValue={clubData.category} />
+                      <Input id="category" defaultValue={club?.category} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="city">City</Label>
+                      <Input id="city" defaultValue={club?.city} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="uni">University</Label>
+                      <Input id="uni" defaultValue={club?.university} />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="founded">Founded Year</Label>
                       <Input
                         id="founded"
                         type="number"
-                        defaultValue={clubData.founded}
+                        defaultValue={club?.founded}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="founded">Total Members</Label>
+                      <Input
+                        required
+                        id="memberCount"
+                        type="number"
+                        defaultValue={club?.memberCount}
                       />
                     </div>
                   </div>
@@ -124,20 +156,7 @@ export default function ClubProfilePage() {
                       </Button>
                     </div>
                   </div> */}
-                  <div className="space-y-2">
-                    <Label>Club Logo</Label>
-                    <div className="flex items-center gap-4">
-                      <img
-                        src={clubData.avatar}
-                        alt="Logo"
-                        className="w-24 h-24 object-cover rounded-lg  border-2 border-Black"
-                      />
-                      <Button variant="outline" size="icon">
-                        <ImagePlus className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                  <Button>Save Changes</Button>
+                  <Button type="submit">Save Changes</Button>
                 </form>
               </CardContent>
             </Card>

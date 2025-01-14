@@ -1,3 +1,5 @@
+"use client"
+
 import axios from 'axios';
 import { Event } from "@/types/event";
 import { mapBackendToFrontendEvent } from "./mapBackendToFrontendEvent";
