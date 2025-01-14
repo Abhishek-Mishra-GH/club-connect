@@ -1,4 +1,3 @@
-"use client"
 
 export const isTokenValid = () => {
   const token = localStorage.getItem("token");

@@ -1,4 +1,3 @@
-"use client"
 
 const resetLocalStorage = (): void => {
   localStorage.removeItem("token");
