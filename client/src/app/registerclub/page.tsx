@@ -64,7 +64,7 @@ export default function page() {
     <div className="w-full min-h-[calc(100vh-80px)] flex justify-center items-center bg-gray-100">
       <form
         onSubmit={handleClubRegisterForm}
-        className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-white border-2 p-4 min-w-[380px] rounded-lg shadow-md"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-3 bg-white border-2 p-4 min-w-[380px] rounded-lg shadow-md"
       >
         <div className="w-full flex flex-col">
           <CustomLabel htmlFor="clubName">Club Name</CustomLabel>
