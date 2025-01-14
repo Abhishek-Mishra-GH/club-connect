@@ -9,7 +9,7 @@ export default function page() {
   const [isClub, setIsClub] = useState(false);
 
   useEffect(() => {
-    const clubStatus = isCurrentUserClub();
+    const clubStatus = localStorage.getItem("isClub") === "true";
     setIsClub(clubStatus);
   }, []);
 

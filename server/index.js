@@ -5,7 +5,8 @@ const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const clubRoutes = require('./routes/clubRoutes');
 const searchRoutes = require('./routes/searchRoutes');
-const eventRoutes = require('./routes/eventRoutes')
+const eventRoutes = require('./routes/eventRoutes');
+const profileRoutes = require("./routes/profileRoutes");
 
 const app = express();
 const PORT = 8080;
@@ -23,6 +24,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/clubs', clubRoutes);
 app.use('/api/search', searchRoutes);
+app.use('/api/profile/', profileRoutes);
 
 
 app.listen(PORT, () => {

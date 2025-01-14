@@ -7,31 +7,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { ImagePlus, Upload, X } from "lucide-react";
 import { Event } from "@/types/event";
 import { fetchEventsByClubId } from "@/utils/fetchEventsByClubId";
 import { EventCard } from "./event-card";
-import Link from "next/link";
 import { clubAtom } from "@/store/useStore";
 import { useAtom } from "jotai";
-
-// Sample data - replace with actual data fetching
-// const clubData: Partial<Club> = {
-//   id: "1",
-//   name: "Computer Science Society",
-//   description: "A community of tech enthusiasts and future innovators.",
-//   category: "Technology",
-//   memberCount: 156,
-//   university: "State University",
-//   founded: 2015,
-//   avatar: "/placeholder.svg?height=100&width=100",
-// };
+import axios from "axios";
+import CreateEventBtn from "./CreateEventBtn";
 
 export default function ClubProfilePage() {
   const [gallery, setGallery] = useState<string[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [club, setClub] = useAtom(clubAtom);
+  const [avatar, setAvatar] = useState<File | null>(null);
+
 
   useEffect(() => {
     const loadEvents = async () => {
@@ -49,17 +39,44 @@ export default function ClubProfilePage() {
     loadEvents();
   }, []);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // In a real application, you would handle file upload to your storage service
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setGallery([...gallery, reader.result as string]);
-      };
-      reader.readAsDataURL(file);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    if(!club) return;
+    
+    try {
+      const formData = new FormData();
+      formData.append("id", club.id);
+      formData.append("name", club.name);
+      formData.append("description", club.description);
+      formData.append("category", club.category);
+      formData.append("city", club.city);
+      formData.append("university", club.university);
+      formData.append("memberCount", club.memberCount.toString());
+      formData.append("founded", club.founded.toString())
+
+      if(avatar) {
+        formData.append('avatar', avatar);
+      }
+
+      const backend = process.env.NEXT_PUBLIC_BACKEND_SERVICE;
+      const url = `${backend}/api/profile/save-profile?type=club`;
+      const response = await axios.put(url, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+
+      const newData = {...club, avatar: response.data.profile.avatar}
+      setClub(newData);
+      localStorage.setItem("clubdata", JSON.stringify(newData));
+    } catch (error: any) {
+      console.log(error);
+      console.log(error.response)
     }
-  };
+
+    setLoading(false);
+  }
+
 
   if (loading) {
     return (
@@ -72,65 +89,81 @@ export default function ClubProfilePage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container py-8 mx-auto">
-        <h1 className="text-4xl font-bold mb-8">Club Profile Management</h1>
+        <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center">Club Profile Management</h1>
 
         <Tabs defaultValue="details" className="space-y-4">
           <TabsList>
             <TabsTrigger value="details">Club Details</TabsTrigger>
             <TabsTrigger value="events">Events</TabsTrigger>
-            <TabsTrigger value="gallery">Gallery</TabsTrigger>
           </TabsList>
 
           <TabsContent value="details">
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl sm:text-2xl">Club Details</CardTitle>
+                <CardTitle className="text-xl sm:text-2xl">
+                  Club Details
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <form className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Club Name</Label>
-                    <Input id="name" defaultValue={club?.name} />
+                <form className="space-y-4" onSubmit={handleSubmit}>
+                  <div>
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Club Name</Label>
+                      <Input id="name" onChange={(e) => setClub({...club!, name: e.target.value })} value={club?.name} />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label>Club Logo</Label>
-                    <div className="flex items-center gap-4">
-                      <img
-                        src={club?.avatar}
-                        alt="Logo"
-                        className="w-24 h-24 object-cover rounded-lg  border-2 border-Black"
+                  <div className="flex gap-6 items-center">
+                  <div>
+                      {club?.avatar ? (
+                        <img
+                          className="h-12 w-12 rounded-full"
+                          src={club.avatar}
+                        />
+                      ) : (
+                        <div className="h-12 w-12 rounded-full flex justify-center items-center text-2xl bg-gray-200 text-black font-semibold">
+                          {" "}
+                          {club?.name.charAt(0)}{" "}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-col items-start gap-4">
+                    <Label>Change Club Logo</Label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          setAvatar(e.target.files?.[0] || null);
+                        }}
                       />
-                      <Button variant="outline" size="icon">
-                        <ImagePlus className="h-4 w-4" />
-                      </Button>
                     </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="description">Description</Label>
                     <Textarea
                       id="description"
-                      defaultValue={club?.description}
+                      onChange={(e) => setClub({...club!, description: e.target.value })} 
+                      value={club?.description}
                     />
                   </div>
                   <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-2">
+                    <div className="space-y-2">
                       <Label htmlFor="category">Category</Label>
-                      <Input id="category" defaultValue={club?.category} />
+                      <Input id="category" onChange={(e) => setClub({...club!, category: e.target.value })} value={club?.category} />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="city">City</Label>
-                      <Input id="city" defaultValue={club?.city} />
+                      <Input id="city" onChange={(e) => setClub({...club!, city: e.target.value })} value={club?.city} />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="uni">University</Label>
-                      <Input id="uni" defaultValue={club?.university} />
+                      <Input id="uni" onChange={(e) => setClub({...club!, university: e.target.value })} value={club?.university} />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="founded">Founded Year</Label>
                       <Input
                         id="founded"
                         type="number"
-                        defaultValue={club?.founded}
+                        onChange={(e) => setClub({...club!, founded: Number(e.target.value)  })} value={club?.founded}
                       />
                     </div>
                     <div className="space-y-2">
@@ -139,23 +172,11 @@ export default function ClubProfilePage() {
                         required
                         id="memberCount"
                         type="number"
-                        defaultValue={club?.memberCount}
+                        onChange={(e) => setClub({...club!, memberCount: Number(e.target.value)  })} value={club?.memberCount}
                       />
                     </div>
                   </div>
-                  {/* <div className="space-y-2">
-                    <Label>Cover Image</Label>
-                    <div className="flex items-center gap-4">
-                      <img
-                        src={clubData.coverImage}
-                        alt="Cover"
-                        className="w-40 h-24 object-cover rounded-lg"
-                      />
-                      <Button variant="outline" size="icon">
-                        <ImagePlus className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div> */}
+
                   <Button type="submit">Save Changes</Button>
                 </form>
               </CardContent>
@@ -165,21 +186,16 @@ export default function ClubProfilePage() {
           <TabsContent value="events">
             <Card>
               <CardHeader>
-                
-              <div className="w-full flex justify-between ">
+                <div className="w-full flex justify-between ">
                   <CardTitle className="text-xl sm:text-2xl">Events</CardTitle>
-                  <Link href="/events/create-event">
-                  <Button>
-                    Create Event
-                  </Button>
-                  </Link>
-              </div>
+                  <CreateEventBtn/>
+                </div>
               </CardHeader>
               <CardContent>
                 {/* Events Grid */}
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {events.map(event => {
-                    return <EventCard key={event.id} event={event}/>
+                  {events.map((event) => {
+                    return <EventCard key={event.id} event={event} />;
                   })}
                   {/* {events.map((event) => (
                     <EventCard key={event.id} event={event} />
@@ -189,55 +205,6 @@ export default function ClubProfilePage() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="gallery">
-            <Card>
-              <CardHeader>
-                <CardTitle>Club Gallery</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-4">
-                  <div className="flex items-center justify-center w-full">
-                    <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted">
-                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <Upload className="h-8 w-8 mb-4 text-muted-foreground" />
-                        <p className="mb-2 text-sm text-muted-foreground">
-                          <span className="font-semibold">Click to upload</span>{" "}
-                          or drag and drop
-                        </p>
-                      </div>
-                      <input
-                        type="file"
-                        className="hidden"
-                        onChange={handleImageUpload}
-                        accept="image/*"
-                      />
-                    </label>
-                  </div>
-                  <div className="grid gap-4 md:grid-cols-3">
-                    {gallery.map((image, index) => (
-                      <div key={index} className="relative group">
-                        <img
-                          src={image}
-                          alt={`Gallery image ${index + 1}`}
-                          className="w-full aspect-square object-cover rounded-lg"
-                        />
-                        <Button
-                          variant="destructive"
-                          size="icon"
-                          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                          onClick={() =>
-                            setGallery(gallery.filter((_, i) => i !== index))
-                          }
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
         </Tabs>
       </div>
     </div>

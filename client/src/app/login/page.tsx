@@ -55,7 +55,7 @@ export default function page() {
             name: entity.name,
             email: entity.email,
             description: entity.description,
-            avatar: entity.image,
+            avatar: entity.avatar,
             numFollowers: entity.followers.length,
             memberCount: entity.memberCount,
             category: entity.category,
@@ -86,7 +86,7 @@ export default function page() {
       <div className="border-2  shadow-xl bg-white rounded-lg px-4 py-6 w-[400px]">
         <form className="flex flex-col gap-4" onSubmit={handleLoginForm}>
           <input
-          required
+            required
             className="border-2 rounded-sm px-4 py-2 text-lg"
             type="email"
             id="email"

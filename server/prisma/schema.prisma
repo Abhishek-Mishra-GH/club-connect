@@ -30,7 +30,7 @@ model Club {
   description     String
   category        String
   memberCount     Int
-  logo            String? // optional
+  avatar          String? // optional
   followers       User[]  @relation("UserFollowing") // optional 
   events          Event[] // optional
   posts           Post[] // optional
