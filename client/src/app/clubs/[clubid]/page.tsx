@@ -3,7 +3,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { EventCard } from "@/components/event-card"
 import { MemberAvatar } from "@/components/member-avatar"
-import { Club, ClubEvent, ClubMember } from "@/types/club"
+import { Club, ClubMember } from "@/types/club"
 import { BadgeCheck, CalendarDays, Users } from 'lucide-react'
 import FollowClubBtn from "@/components/FollowClubBtn"
 import { useEffect, useState } from "react"
@@ -13,7 +13,7 @@ import { useAtom } from "jotai"
 import { followedClubsAtom } from "@/store/useStore"
 
 
-const events: ClubEvent[] = [
+const events: any = [
   {
     id: "1",
     title: "Annual Hackathon 2024",
@@ -162,7 +162,7 @@ export default function page() {
             <div>
               <h2 className="text-2xl font-bold mb-4">Upcoming Events</h2>
               <div className="grid sm:grid-cols-2 gap-4">
-                {events.map((event) => (
+                {events.map((event: any) => (
                   <EventCard key={event.id} event={event} />
                 ))}
               </div>
