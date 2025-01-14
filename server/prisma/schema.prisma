@@ -36,15 +36,22 @@ model Club {
   posts           Post[] // optional
 }
 
+enum EventStatus {
+  UPCOMING
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
 model Event {
   id            String         @id @default(cuid())
   name          String
   description   String
-  image         String
+  image         String?
   date          DateTime
   location      String
   clubId        String
-  status        String         @default("upcoming")
+  status        EventStatus         @default(UPCOMING)
   registrations Registration[]
   club          Club           @relation(fields: [clubId], references: [id])
 }
@@ -55,6 +62,9 @@ model Registration {
   eventId String
   user    User   @relation(fields: [userId], references: [id])
   event   Event  @relation(fields: [eventId], references: [id])
+  
+  @@index([eventId, userId], name: "event_user_index")
+  @@unique([userId, eventId])
 }
 
 model Post {

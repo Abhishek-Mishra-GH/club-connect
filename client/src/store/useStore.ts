@@ -22,16 +22,6 @@ interface User {
 
 
 
-export interface Event {
-  id: string;
-  name: string;
-  description: string;
-  date: string;
-  location: string;
-  clubId: string | null;
-  image: string | null;
-}
-
 interface IsClub {
   value: boolean;
 }

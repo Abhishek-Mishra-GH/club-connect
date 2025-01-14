@@ -1,16 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { clubAtom } from "@/store/useStore";
 import { twMerge } from "tailwind-merge";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import isCurrentUserClub from "@/utils/isCurrentUserClub";
 
 export default function page() {
   const [club, setClub] = useAtom(clubAtom);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [configLoaded, setConfigLoaded] = useState(false);
   const router = useRouter();
   const [event, setEvent] = useState({
     name: "",
@@ -20,6 +22,18 @@ export default function page() {
     time: "12:00",
     clubId: club?.id,
   });
+
+  useEffect(() => {
+
+    if(!localStorage.getItem("token")) {
+      router.push('/login')
+    }
+
+    if(!isCurrentUserClub()) {
+      router.push('/events');
+    }
+    setConfigLoaded(true);
+  },[])
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
     e.preventDefault();
@@ -55,6 +69,12 @@ export default function page() {
       });
   }
 
+  if(!configLoaded) {
+    return <div className="h-[calc(100vh-120px)] w-screen flex justify-center items-center">
+      <h2 className="text-2xl">Please Wait...</h2>
+    </div>
+  }
+
   return (
     <div className="h-[calc(100vh-80px)]">
       <h1 className="text-3xl text-center text-black font-semibold my-6">
@@ -75,10 +95,9 @@ export default function page() {
           }}
         />
 
-        <input
+        <textarea
           required
           className="border-2 rounded-sm text-lg px-4 py-2"
-          type="text"
           value={event.description}
           placeholder="Description"
           onChange={(e) => {
@@ -86,12 +105,11 @@ export default function page() {
           }}
         />
 
-        <input
+        <textarea
           required
           className="border-2 rounded-sm text-lg px-4 py-2"
-          type="text"
           value={event.location}
-          placeholder="Location"
+          placeholder="Admin Block, SOIT RGPV Bhopal, 462033"
           onChange={(e) => {
             setEvent({ ...event, location: e.target.value });
           }}

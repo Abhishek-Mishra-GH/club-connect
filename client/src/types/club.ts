@@ -5,15 +5,6 @@ export interface ClubMember {
   avatar: string
 }
 
-export interface ClubEvent {
-  id: string
-  title: string
-  date: Date
-  location: string
-  description: string
-  image?: string
-  numRegistered: number
-}
 
 export interface Club {
   id: string

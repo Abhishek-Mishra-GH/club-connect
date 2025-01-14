@@ -7,7 +7,7 @@ exports.getAllClubs = async (req, res) => {
   try {
     const clubs = await prisma.club.findMany({
       include: {
-        followers: true
+        followers: true,
       }
     });
     res.status(200).json(clubs);
@@ -43,6 +43,7 @@ exports.getClubByIdWithUserFollowing = async (req, res) => {
 }
 
 exports.getClubById = async (req, res) => {
+  const id = req.id;
   try {
     const club = await prisma.club.findUnique({
       where: { id },

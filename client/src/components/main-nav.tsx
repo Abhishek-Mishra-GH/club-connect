@@ -56,6 +56,7 @@ export function MainNav() {
           )}
           {entity ? (
             <Button
+              className="bg-white text-black rounded-md border-2 border-black hover:border-red-600 hover:bg-white hover:text-red-600"
               onClick={() => {
                 setUser(null);
                 setClub(null);
@@ -63,6 +64,9 @@ export function MainNav() {
                 localStorage.removeItem("token");
                 localStorage.removeItem("isClub");
                 localStorage.removeItem("userid");
+                localStorage.removeItem("clubid");
+                localStorage.removeItem("clubdata");
+                localStorage.removeItem("userdata");
               }}
             >
               Logout

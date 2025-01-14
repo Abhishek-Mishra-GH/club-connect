@@ -35,30 +35,38 @@ export default function page() {
         const isClub = response.data.isClub;
 
         if(!isClub) {
-          setUser({
+          const userData = {
             id: entity.id,
             name: entity.name,
             email: entity.email,
             avatar: entity.avatar,
             university: entity.university,
             city: entity.city
-          });
+          };
 
+          setUser(userData);
+
+          localStorage.setItem("userdata", JSON.stringify(userData));
           localStorage.setItem("userid", entity.id);
         } else {
-          const {password, ...clubFromResp} = entity;
-          // setClub({
-          //   id: entity.id,
-          //   name: entity.name,
-          //   email: entity.email,
-          //   description: entity.description,
-          //   avatar: entity.image,
-          //   numFollowers: entity.followers.length,
-          //   memberCount: entity.memberCount,
-          //   category: entity.category,
 
-          // });
-          setClub({...clubFromResp});
+          const clubData = {
+            id: entity.id,
+            name: entity.name,
+            email: entity.email,
+            description: entity.description,
+            avatar: entity.image,
+            numFollowers: entity.followers.length,
+            memberCount: entity.memberCount,
+            category: entity.category,
+            university: entity.university,
+            city: entity.city,
+            founded: entity.founded,
+          }
+
+          setClub(clubData);
+          localStorage.setItem("clubdata", JSON.stringify(clubData));
+          localStorage.setItem("clubid", entity.id);
         }
 
         router.push("/");

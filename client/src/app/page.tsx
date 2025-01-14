@@ -1,15 +1,28 @@
-'use client'
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import Image from "next/image"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect } from "react";
 
 export default function Home() {
 
+  useEffect(() => {
+    
+  } ,[])
+
+
   return (
     <div className="flex-1">
-      <section className="w-full sm:min-h-screen py-12 md:py-24 lg:py-32 xl:py-48 flex justify-center">
+      <section className="w-full sm:min-h-[55vh] md:min-h-[65vh] lg:min-h-[calc(100vh-90px)] py-12 md:py-24 lg:py-52 xl:py-52 flex justify-center items-center md:items-start">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center space-y-4 text-center">
             <div className="sm:space-y-3 space-y-5">
@@ -17,33 +30,46 @@ export default function Home() {
                 Discover Amazing Club Events
               </h1>
               <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                Follow clubs, attend events, and connect with people who share your interests.
+                Follow clubs, attend events, and connect with people who share
+                your interests.
               </p>
             </div>
             <div className="sm:space-x-4 sm:inline-block flex flex-col space-y-4 ">
-              <Button size="lg">Browse Clubs</Button>
-              <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                Explore Events
-              </Button>
+              <Link href={"/clubs"}>
+                <Button size="lg">Browse Clubs</Button>
+              </Link>
+              <Link href={"/events"}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
+                  Explore Events
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       </section>
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800 flex justify-center">
+      <section className="w-full py-12 bg-gray-100 dark:bg-gray-800 flex justify-center">
         <div className="container px-4 md:px-6">
           <Tabs defaultValue="popular" className="space-y-4">
             <TabsList>
-              <TabsTrigger value="popular" className="px-4 py-2 text-lg">Popular Events</TabsTrigger>
+              <TabsTrigger value="popular" className="px-4 py-2 text-lg ml-4 sm:ml-0">
+                Popular Events
+              </TabsTrigger>
               {/* <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
               <TabsTrigger value="recommended">Recommended</TabsTrigger> */}
             </TabsList>
             <TabsContent value="popular" className="space-y-4">
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 place-content-center px-4">
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 place-content-center px-4 sm:px-0">
                 {Array.from({ length: 6 }).map((_, i) => (
-                  <Card key={i} className="max-w-[350px] md:max-w-auto">
+                  <Card key={i} className="max-w-[340px] md:max-w-lg">
                     <CardHeader>
                       <CardTitle>Tech Meetup {i + 1}</CardTitle>
-                      <CardDescription>Join us for an evening of tech talks</CardDescription>
+                      <CardDescription>
+                        Join us for an evening of tech talks
+                      </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <Image
@@ -62,6 +88,5 @@ export default function Home() {
         </div>
       </section>
     </div>
-  )
+  );
 }
-
