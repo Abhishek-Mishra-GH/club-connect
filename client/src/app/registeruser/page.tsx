@@ -32,7 +32,8 @@ export default function page() {
       return;
     }
 
-    const url = "http://localhost:8080/api/auth/register";
+    const backend = process.env.NEXT_PUBLIC_BACKEND_SERVICE;
+    const url = `${backend}/api/auth/register`;
     const data = { ...user };
 
     axios

@@ -7,12 +7,14 @@ import { twMerge } from "tailwind-merge";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import isCurrentUserClub from "@/utils/isCurrentUserClub";
+import Loading from "@/app/loading";
 
 export default function page() {
   const [club, setClub] = useAtom(clubAtom);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [configLoaded, setConfigLoaded] = useState(false);
+  const [image, setImage] = useState<File | null>(null);
   const router = useRouter();
   const [event, setEvent] = useState({
     name: "",
@@ -42,18 +44,30 @@ export default function page() {
 
     const isoDateTime = new Date(`${event.date}T${event.time}:00`);
 
-    const data = {
-      name: event.name,
-      description: event.description,
-      location: event.location,
-      clubId: event.clubId,
-      date: isoDateTime,
-    };
+    const formData = new FormData();
+    formData.append("name", event.name);
+    formData.append("description", event.description);
+    formData.append("location", event.location);
+    formData.append("clubId", event.clubId!);
+    formData.append("date", isoDateTime.toISOString());
+
+    if(image) {
+      formData.append('image', image);
+    }
+
+    // const data = {
+    //   name: event.name,
+    //   description: event.description,
+    //   location: event.location,
+    //   clubId: event.clubId,
+    //   date: isoDateTime,
+    // };
 
     axios
-      .post(url, data, {
+      .post(url, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
+          'Content-Type': 'multipart/form-data',
         },
       })
       .then((response) => {
@@ -75,14 +89,18 @@ export default function page() {
     </div>
   }
 
+    if(loading) return <div className="w-full h-[calc(100vh-100px)]">
+      <Loading/>
+    </div>
+
   return (
-    <div className="h-[calc(100vh-80px)]">
-      <h1 className="text-3xl text-center text-black font-semibold my-6">
+    <div className="h-[calc(100vh-80px)] bg-gradient-to-b from-cyan-50 to-white w-full flex flex-col items-center mb-12">
+      <h1 className="text-3xl text-center text-cyan-600 font-semibold mt-6 mb-8">
         Create Event
       </h1>
       <form
         onSubmit={(e) => handleSubmit(e)}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-3 w-[380px] sm:w-[450px] max-w-screen border-2 border-black backdrop:blur-md shadow-xl rounded-md sm:p-4 p-2"
+        className="flex flex-col gap-3 w-[380px] sm:w-[450px] max-w-screen border-2 border-cyan-600 backdrop:blur-md shadow-xl rounded-xl sm:p-4 p-2"
       >
         <input
           required
@@ -148,14 +166,32 @@ export default function page() {
           />
         </div>
 
+        <div className="flex flex-col gap-3 p-2">
+          <div className="text-lg">
+            Cover Image:{" "}
+          </div>
+          <input
+          required
+          className="border-2 rounded-sm text-lg px-4 py-2"
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            setImage(e.target.files?.[0] || null);
+          }}
+        />
+
+        </div>
+
+
+
         {error && <p className="text-red-500">* {error}</p>}
 
         <button
           type="submit"
           disabled={loading}
           className={twMerge(
-            "border-2 rounded-lg px-4 py-2 text-white bg-black hover:bg-gray-700",
-            loading && "bg-gray-700"
+            "border-2 rounded-lg px-4 py-2 text-white bg-cyan-600 hover:bg-cyan-800",
+            loading && "bg-cyan-800"
           )}
         >
           Create Event

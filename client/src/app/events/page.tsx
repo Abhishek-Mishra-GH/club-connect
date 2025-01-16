@@ -17,6 +17,7 @@ import { fetchEvents } from "@/utils/fetchEvents";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Loading from "../loading";
 
 export default function EventsPage() {
   const [search, setSearch] = useState("");
@@ -58,9 +59,10 @@ export default function EventsPage() {
       } catch (err) {
         console.error("Error loading events:", err);
         setError("Failed to load events. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
+      } 
+
+
+      setLoading(false);
     };
 
     loadEvents();
@@ -78,7 +80,7 @@ export default function EventsPage() {
   if (loading) {
     return (
       <div className="h-[calc(100vh-120px)] w-screen flex justify-center items-center">
-        <h2 className="text-2xl">Please Wait...</h2>
+        <Loading/>
       </div>
     );
   }
@@ -96,7 +98,7 @@ export default function EventsPage() {
       <div className="container py-8 mx-auto">
         <div className="flex justify-between">
         <h1 className="text-2xl sm:text-4xl font-bold mb-8 text-cyan-600">
-          Explore Our Amazing Events
+          Explore Amazing Events
         </h1>
         {isClub && <Link href="/events/create-event">
           <Button>Create Event</Button>

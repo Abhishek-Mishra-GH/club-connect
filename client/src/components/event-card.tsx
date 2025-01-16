@@ -33,37 +33,54 @@ export function EventCard({ event }: EventCardProps) {
 
   return (
     <Card>
-      {event.image || (
-        <div className="relative top-0 h-36 w-full overflow-hidden rounded-t-lg bg-gray-500">
+      <div>
+        <div className="relative aspect-[16/9] overflow-hidden">
           <img
-            src={event.image}
+            src={
+              event.image ||
+              "https://clubconnect.blr1.digitaloceanspaces.com/placeholder/placeholder-upcoming-image.png"
+            }
             alt={event.name}
-            className="object-cover w-full h-full"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 rounded-t-xl"
           />
         </div>
-      )}
+        {event.isPast && (
+          <div className="absolute inset-0 bg-background/90 backdrop-blur-sm flex items-center justify-center">
+            <span className="text-lg font-semibold">Past Event</span>
+          </div>
+        )}
+      </div>
       <CardHeader>
         <CardTitle className="text-xl">{event.name}</CardTitle>
         <CardDescription className="flex items-center gap-2">
           <CalendarIcon className="h-4 w-4" />
-          {event.date.toLocaleDateString()}
+          {event.date.toLocaleDateString() + " " + event.time}
         </CardDescription>
       </CardHeader>
       <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            {event.description}
-          </p>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-            <div><MapPinIcon className="h-4 w-4" /></div>
-            <p>{event.location}</p>
+        <div className="flex flex-col justify-between">
+        <p className="text-sm text-muted-foreground mb-4">
+          {event.description}
+        </p>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+          <div>
+            <MapPinIcon className="h-4 w-4" />
           </div>
-          <div className={twMerge("flex items-center gap-2 text-sm text-muted-foreground mb-4", (event.description.length + event.location.length) < 50 ? "mb-9" : "mb-4")}>
-            <Users className="h-4 w-4" />
-            <span className={twMerge("font-semibold text-black/90")}>
-              {numRegistrations + " "}
-            </span>{" "}
-            Registrations
-          </div>
+          <p>{event.location}</p>
+        </div>
+        <div
+          className={twMerge(
+            "flex items-center gap-2 text-sm text-muted-foreground"
+          )}
+        >
+          <Users className="h-4 w-4" />
+          <span className={twMerge("font-semibold text-black/90")}>
+            {numRegistrations + " "}
+          </span>{" "}
+          Registrations
+        </div>
+        </div>
+        <div className="border-2 border-green-600 flex-1">
         <Button
           onClick={() => {
             setLoading(true);
@@ -82,6 +99,7 @@ export function EventCard({ event }: EventCardProps) {
         >
           {registered ? "Registered" : "Register for Event"}
         </Button>
+        </div>
       </CardContent>
     </Card>
   );

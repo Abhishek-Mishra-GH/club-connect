@@ -61,7 +61,7 @@ export default function ClubProfilePage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container py-8 mx-auto">
-        <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center">Club Profile Management</h1>
+        <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center">Profile</h1>
 
         <Tabs defaultValue="details" className="space-y-4">
           <TabsList>
@@ -98,7 +98,7 @@ export default function ClubProfilePage() {
                       )}
                     </div>
                     <div className="flex flex-col items-start gap-4">
-                    <Label>Change Club Logo</Label>
+                    <Label>Change Profile Picture</Label>
                       <input
                         type="file"
                         accept="image/*"

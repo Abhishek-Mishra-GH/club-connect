@@ -1,4 +1,5 @@
-const prisma = require('../prisma/prisma')
+const prisma = require('../prisma/prisma');
+const { uploadFileToS3 } = require("../services/s3Service");
 
 function transformEvents(events) {
   return events.map((event) => ({
@@ -23,6 +24,8 @@ function transformEvents(events) {
 exports.createEvent = async (req, res) => {
   const { name, description, date, location } = req.body;
   const clubId = req.id;
+  const file = req.file;
+
   try {
 
     const club = await prisma.club.findUnique({
@@ -39,12 +42,19 @@ exports.createEvent = async (req, res) => {
       return res.status(401).json({message: "Unauthorized"});
     }
 
+    let imageUrl = null;
+    // upload to s3
+    if(file) {
+      imageUrl = await uploadFileToS3(file.buffer, file.mimetype, clubId);
+    }
+
     const event = await prisma.event.create({
       data: {
         name,
         date,
         location,
         description,
+        image: imageUrl || undefined,
         club: {
           connect: {
             id: clubId

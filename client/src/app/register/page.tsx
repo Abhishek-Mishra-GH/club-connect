@@ -4,10 +4,10 @@ import Link from "next/link"
 import { Building2, GraduationCap } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { use, useEffect, useState } from "react"
-import AdminLoading from "../loading"
+import { useEffect, useState } from "react"
 import { isUserLoggedIn } from "@/utils/auth"
 import { useRouter } from "next/navigation"
+import Loading from "../loading"
 
 export default function page() {
   const [loading, setLoading] = useState(true);
@@ -22,7 +22,7 @@ export default function page() {
   } ,[]);
   
   if(loading) return <div className="w-full h-[calc(100vh-100px)]">
-    <AdminLoading/>
+    <Loading/>
   </div>
 
   return (

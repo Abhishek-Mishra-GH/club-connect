@@ -13,7 +13,7 @@ const s3 = new S3Client({
 })
 
 const uploadFileToS3 = async (buffer, mimetype, id) => {
-  const fileKey = `${id}/avatars/${crypto.randomUUID()}.${mime.extension(mimetype)}`;
+  const fileKey = `${id}/${crypto.randomUUID()}.${mime.extension(mimetype)}`;
   const bucketName = process.env.SPACES_BUCKET_NAME;
 
   const uploadParams = {

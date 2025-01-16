@@ -1,4 +1,6 @@
-const prisma = require('../prisma/prisma')
+const prisma = require('../prisma/prisma');
+const { transformEvents } = require("../utils/transformEvents");
+
 
 exports.getAllClubs = async (req, res) => {
 
@@ -24,7 +26,15 @@ exports.getClubByIdWithUserFollowing = async (req, res) => {
       where: { id },
       include: {
         followers: true,
-        events: true
+        events: {
+          include: {
+            club: {
+              select: {
+                city: true,
+              }
+            }
+          }
+        }
       },
     })
 
@@ -32,12 +42,15 @@ exports.getClubByIdWithUserFollowing = async (req, res) => {
       return res.status(404).json({ message: 'Club not found' });
     }
 
+    const transformedEvents = transformEvents(club.events);
+
     // check if user has followed this club
     const followed = club.followers.some((follower) => follower.id === userid);
 
-    res.status(200).json({ club, isClub: true, followed });
+    res.status(200).json({ club, isClub: true, followed, events: transformedEvents });
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch club' });
+    console.log(err.message)
   }
 
 }
