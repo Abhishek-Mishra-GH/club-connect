@@ -28,11 +28,6 @@ export function BottomNav() {
       href: "/events",
       label: "Events",
       icon: Calendar
-    },
-    {
-      href: "/profile",
-      label: "Profile",
-      icon: User
     }
   ]
 
