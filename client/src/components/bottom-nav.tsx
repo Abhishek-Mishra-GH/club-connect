@@ -20,15 +20,15 @@ export function BottomNav() {
       icon: Compass
     },
     {
+      href: "/events",
+      label: "Events",
+      icon: Calendar
+    },
+    {
       href: "/posts",
       label: "Posts",
       icon: MessageSquare
     },
-    {
-      href: "/events",
-      label: "Events",
-      icon: Calendar
-    }
   ]
 
   return (

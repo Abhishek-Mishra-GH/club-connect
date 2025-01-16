@@ -22,7 +22,8 @@ export default function page() {
 
     const email = e.target.email.value;
     const password = e.target.password.value;
-    const url = "http://localhost:8080/api/auth/login";
+    const backend = process.env.NEXT_PUBLIC_BACKEND_SERVICE
+    const url = `${backend}/api/auth/login`;
     const data = { email, password };
 
     axios.post(url, data)

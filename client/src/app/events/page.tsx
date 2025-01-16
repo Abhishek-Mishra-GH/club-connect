@@ -34,7 +34,7 @@ export default function EventsPage() {
     // check configs
 
     if (!localStorage.getItem("token")) {
-      router.push("/register");
+      router.push("/login");
     }
 
     // check if it is club

@@ -28,6 +28,10 @@ export default function PostsPage() {
 
   useEffect(() => {
     // check if it is club
+    if (!localStorage.getItem("token")) {
+      router.push("/login");
+    }
+
     const clubStatus = localStorage.getItem("isClub") === "true";
     setIsClub(clubStatus);
 
