@@ -4,12 +4,12 @@ import { Condiment, Inter } from "next/font/google";
 import "./globals.css";
 import { MainNav } from "@/components/main-nav";
 import { useAtom } from "jotai";
-import { clubAtom, userAtom, followedClubsAtom } from "@/store/useStore";
-import axios from "axios";
+import { clubAtom, userAtom } from "@/store/useStore";
 import { useEffect, useState } from "react";
 import isCurrentUserClub from "@/utils/isCurrentUserClub";
 import { Footer } from "@/components/Footer";
 import Loading from "./loading";
+import { BottomNav } from "@/components/bottom-nav";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -49,6 +49,7 @@ export default function RootLayout({
             <MainNav />
             <main className="flex-1">{children}</main>
             <Footer />
+            <BottomNav />
           </div>
         )}
       </body>

@@ -55,14 +55,6 @@ export default function page() {
       formData.append('image', image);
     }
 
-    // const data = {
-    //   name: event.name,
-    //   description: event.description,
-    //   location: event.location,
-    //   clubId: event.clubId,
-    //   date: isoDateTime,
-    // };
-
     axios
       .post(url, formData, {
         headers: {
@@ -71,7 +63,6 @@ export default function page() {
         },
       })
       .then((response) => {
-        console.log(response.data);
         router.push("/profile");
       })
       .catch((err) => {

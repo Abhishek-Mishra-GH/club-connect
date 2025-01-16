@@ -5,6 +5,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -44,11 +45,11 @@ export function EventCard({ event }: EventCardProps) {
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 rounded-t-xl"
           />
         </div>
-        {event.isPast && (
+        {/* {event.isPast && (
           <div className="absolute inset-0 bg-background/90 backdrop-blur-sm flex items-center justify-center">
             <span className="text-lg font-semibold">Past Event</span>
           </div>
-        )}
+        )} */}
       </div>
       <CardHeader>
         <CardTitle className="text-xl">{event.name}</CardTitle>
@@ -80,8 +81,10 @@ export function EventCard({ event }: EventCardProps) {
           Registrations
         </div>
         </div>
-        <div className="border-2 border-green-600 flex-1">
-        <Button
+
+      </CardContent>
+          <CardFooter className={twMerge(isClub && "hidden", "px-2 pb-2")}>
+          <Button
           onClick={() => {
             setLoading(true);
             registerForEvent(event.id);
@@ -91,7 +94,6 @@ export function EventCard({ event }: EventCardProps) {
           }}
           className={twMerge(
             "w-full",
-            isClub && "hidden",
             loading && "bg-black/70",
             registered &&
               "bg-white text-black border-2 border-black hover:bg-white cursor-default"
@@ -99,8 +101,7 @@ export function EventCard({ event }: EventCardProps) {
         >
           {registered ? "Registered" : "Register for Event"}
         </Button>
-        </div>
-      </CardContent>
+          </CardFooter>
     </Card>
   );
 }

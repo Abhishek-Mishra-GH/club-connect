@@ -72,9 +72,9 @@ export default function EventsPage() {
     const matchesSearch =
       event.name.toLowerCase().includes(search.toLowerCase()) ||
       event.description.toLowerCase().includes(search.toLowerCase());
-    // const matchesCity = selectedCity === "All Cities" || event.city === selectedCity
+    const matchesCity = selectedCity === "All Cities" || event.city === selectedCity
     const matchesPastFilter = showPastEvents || !event.isPast;
-    return matchesSearch && matchesPastFilter;
+    return matchesSearch && matchesCity && matchesPastFilter
   });
 
   if (loading) {
@@ -94,7 +94,7 @@ export default function EventsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background px-2">
       <div className="container py-8 mx-auto">
         <div className="flex justify-between">
         <h1 className="text-2xl sm:text-4xl font-bold mb-8 text-cyan-600">

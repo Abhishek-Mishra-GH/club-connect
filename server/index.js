@@ -7,6 +7,7 @@ const clubRoutes = require('./routes/clubRoutes');
 const searchRoutes = require('./routes/searchRoutes');
 const eventRoutes = require('./routes/eventRoutes');
 const profileRoutes = require("./routes/profileRoutes");
+const postRoutes = require('./routes/postRoutes');
 
 const app = express();
 const PORT = 8080;
@@ -19,12 +20,14 @@ app.use((req, res, next) => {
   next();
 });
 
+
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/clubs', clubRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/profile/', profileRoutes);
+app.use('/api/posts', postRoutes);
 
 
 app.listen(PORT, () => {

@@ -14,9 +14,9 @@ import { clubAtom } from "@/store/useStore";
 import { useAtom } from "jotai";
 import axios from "axios";
 import CreateEventBtn from "./CreateEventBtn";
+import Logout from "./Logout";
 
 export default function ClubProfilePage() {
-  const [gallery, setGallery] = useState<string[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [club, setClub] = useAtom(clubAtom);
@@ -89,13 +89,16 @@ export default function ClubProfilePage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container py-8 mx-auto">
-        <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center">Club Profile Management</h1>
+        <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center text-cyan-600">Club Profile Management</h1>
 
         <Tabs defaultValue="details" className="space-y-4">
+          <div className="flex justify-between">
           <TabsList>
             <TabsTrigger value="details">Club Details</TabsTrigger>
             <TabsTrigger value="events">Events</TabsTrigger>
           </TabsList>
+          <Logout/>
+          </div>
 
           <TabsContent value="details">
             <Card>
@@ -112,7 +115,7 @@ export default function ClubProfilePage() {
                       <Input id="name" onChange={(e) => setClub({...club!, name: e.target.value })} value={club?.name} />
                     </div>
                   </div>
-                  <div className="flex gap-6 items-center">
+                  <div className="flex gap-1 sm:gap-6 items-center">
                   <div>
                       {club?.avatar ? (
                         <img
@@ -126,7 +129,7 @@ export default function ClubProfilePage() {
                         </div>
                       )}
                     </div>
-                    <div className="flex flex-col items-start gap-4">
+                    <div className="flex flex-col items-start gap-2 sm:gap-4">
                     <Label>Change Club Logo</Label>
                       <input
                         type="file"

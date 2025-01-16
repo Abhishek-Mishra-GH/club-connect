@@ -6,7 +6,7 @@ import { Button } from "./ui/button"
 
 export default function HomePageCC() {
   return (
-    <section className="bg-gradient-to-b from-cyan-50 to-white w-full sm:min-h-[55vh] md:min-h-[65vh] lg:min-h-[calc(100vh-90px)] py-12 md:py-24 lg:py-52 xl:py-52 flex justify-center items-center md:items-start">
+    <section className="bg-gradient-to-b from-cyan-50 to-white w-full min-h-[63vh] lg:min-h-[calc(100vh-90px)] pt-16 pb-10 md:py-24 lg:py-52 xl:py-52 flex justify-center items-center md:items-start">
     <div className="container px-4 md:px-6">
       <div className="flex flex-col items-center space-y-4 text-center">
         <div className="sm:space-y-3 space-y-5">

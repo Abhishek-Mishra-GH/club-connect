@@ -1,5 +1,4 @@
-
-import { format, parseISO } from 'date-fns';
+import { format, parseISO } from "date-fns";
 import { Event } from "@/types/event";
 
 export const mapBackendToFrontendEvent = (backendEvent: any): Event => {

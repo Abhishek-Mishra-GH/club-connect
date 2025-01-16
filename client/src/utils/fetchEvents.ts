@@ -7,7 +7,7 @@ export const fetchEvents = async (): Promise<Event[]> => {
   const userId = localStorage.getItem("userid") || "NA"
   try {
     const backend = process.env.NEXT_PUBLIC_BACKEND_SERVICE
-    const response = await axios.get(`${backend}/api/events?userId=${userId}`); // Adjust endpoint as needed
+    const response = await axios.get(`${backend}/api/events?userId=${userId}`); 
     const backendEvents = response.data;
 
     // Map backend events to the frontend Event type

@@ -100,7 +100,7 @@ export default function page() {
       });
 
       const backendEvents = response.data.events;
-      const eventsData =  backendEvents.map((backendEvent: any) => 
+      const eventsData = backendEvents.map((backendEvent: any) =>
         mapBackendToFrontendEvent(backendEvent)
       );
 
@@ -115,25 +115,32 @@ export default function page() {
       {/* Hero Section */}
       <div className="relative container mx-auto rounded-lg backdrop:blur-md shadow-md mb-2 mt-4 px-2 sm:px-4 py-4 border-2">
         <div className="flex items-center gap-6 justify-center">
-        <Avatar className="h-16 w-16">
-                <AvatarImage
-                  src={clubData.avatar ? clubData.avatar : undefined}
-                  alt={clubData.name}
-                />
-                <AvatarFallback>{clubData.name[0]}</AvatarFallback>
-              </Avatar>
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold text-black mb-1">
+          <Avatar className="h-12 w-12 md:h-16 md:w-16">
+            <AvatarImage
+              src={clubData.avatar ? clubData.avatar : undefined}
+              alt={clubData.name}
+            />
+            <AvatarFallback>{clubData.name[0]}</AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col gap-2">
+            <h1 className="text-xl md:text-3xl font-bold text-black mb-1">
               {clubData?.name}
             </h1>
-            <h3 className="text-black/95 text-xl">{clubData?.university}</h3>
-            <p className="text-black/70 font-bold">
-              {clubData?.numFollowers
-                ? clubData.numFollowers + " Followers"
-                : "0 Followers"}{" "}
-            </p>
+            <h3 className="text-black/95 text-lg md:text-xl">{clubData?.university}</h3>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+              <div className="px-2 py-1 rounded-full bg-cyan-100 text-cyan-600 text-md font-medium dark:bg-cyan-950 dark:text-cyan-200 flex justify-center items-center mr-1">
+                {clubData?.numFollowers
+                  ? clubData.numFollowers + " Followers"
+                  : "0 Followers"}{" "}
+              </div>
+              <div className="px-2 py-1 rounded-full bg-cyan-100 text-cyan-600 text-md font-medium dark:bg-cyan-950 dark:text-cyan-200 flex justify-center items-center mr-1">
+                {clubData.category}
+              </div>
+              <div className="px-2 py-1 rounded-full bg-cyan-100 text-cyan-600 text-md font-medium dark:bg-cyan-950 dark:text-cyan-200 flex justify-center items-center mr-1">
+                {clubData.city}
+              </div>
+            </div>
           </div>
-
           <div>
             <FollowClubBtn
               incrFollow={incrFollow}
@@ -151,7 +158,7 @@ export default function page() {
         <div className="grid lg:grid-cols-3 gap-8 place-content-center">
           {/* Left Column - Club Info */}
           <div className="lg:col-span-2 space-y-8">
-            <div className="prose dark:prose-invert">
+            <div className="prose dark:prose-invert px-2">
               <h2 className="text-2xl font-bold">About Us</h2>
               <p>{clubData?.description}</p>
             </div>
@@ -159,7 +166,7 @@ export default function page() {
             {events && (
               <div>
                 <h2 className="text-2xl font-bold mb-4">Upcoming Events</h2>
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-4 px-4">
                   {events.map((event: any) => (
                     <EventCard key={event.id} event={event} />
                   ))}
@@ -182,7 +189,7 @@ export default function page() {
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
               <div className="p-6 space-y-4">
                 <h3 className="text-xl font-semibold">Club Statistics</h3>
-                <div className="space-y-4">
+                <div className="space-y-4 px-4">
                   <div className="flex items-center gap-4">
                     <Users className="h-5 w-5 text-muted-foreground" />
                     <div>

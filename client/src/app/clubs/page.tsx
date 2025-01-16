@@ -1,42 +1,76 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ClubCard } from "@/components/club-card"
-import { Club } from "@/types/club"
-
-// Sample data - replace with actual data fetching
-const clubs: Club[] = [
-  {
-    id: "1",
-    name: "ClubConnect",
-    description: "A community of tech enthusiasts and future innovators.",
-    category: "Technology",
-    memberCount: 156,
-    university: "School of information technology, RGPV",
-    founded: 2015,
-    avatar: "https://clubconnect.blr1.digitaloceanspaces.com/cm5rsn86i0000h76w73s1kc5h/avatars/abf0bb16-949b-4519-a5de-856cc9ed5aac.png",
-    numFollowers: 2,
-    city: "Bhopal",
-    email: ""
-  },
-  // Add more sample clubs...
-]
-
-const categories = ["All", "Technology", "Sports", "Arts", "Academic", "Social"]
-const universities = ["All", "State University", "City College", "Tech Institute"]
+import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ClubCard } from "@/components/club-card";
+import { Club } from "@/types/club";
+import { useRouter } from "next/navigation";
+import { fetchClubs } from "@/utils/fetchClubs";
+import Loading from "../loading";
 
 export default function ClubsPage() {
-  const [search, setSearch] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("All")
+  const [search, setSearch] = useState("");
+  const [categories, setCategories] = useState<string[]>(["All Categories"]);
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  const [clubs, setClubs] = useState<Club[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
-  const filteredClubs = clubs.filter(club => {
-    const matchesSearch = club.name.toLowerCase().includes(search.toLowerCase()) ||
-      club.description.toLowerCase().includes(search.toLowerCase())
-    const matchesCategory = selectedCategory === "All" || club.category === selectedCategory
-    return matchesSearch && matchesCategory 
-  })
+  useEffect(() => {
+    // check configs
+    if (!localStorage.getItem("token")) {
+      router.push("/register");
+    }
+
+    // load events
+    const loadEvents = async () => {
+      try {
+        const fetchedClubs = await fetchClubs();
+        setClubs(fetchedClubs);
+        const uniqueCategories: string[] = Array.from(
+          new Set(fetchedClubs.map((club) => club.category.toLowerCase()))
+        ).map(
+          (catLowerCase) =>
+            fetchedClubs.find(
+              (club) => club.category.toLowerCase() === catLowerCase
+            )!.category
+        );
+
+        setCategories(["All Categories", ...uniqueCategories]);
+      } catch (err) {
+        console.error("Error loading events:", err);
+      }
+
+      setLoading(false);
+    };
+
+    loadEvents();
+  }, []);
+
+  const filteredClubs = clubs.filter((club) => {
+    const matchesSearch =
+      club.name.toLowerCase().includes(search.toLowerCase()) ||
+      club.description.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "All Categories" ||
+      club.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  if (loading) {
+    return (
+      <div className="h-[calc(100vh-120px)] w-screen flex justify-center items-center">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-cyan-50 to-white ">
@@ -46,10 +80,11 @@ export default function ClubsPage() {
             University Clubs
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Discover and join amazing university clubs. Connect with like-minded students and pursue your passions.
+            Discover and join amazing university clubs. Connect with like-minded
+            students and pursue your passions.
           </p>
         </div>
-        
+
         {/* Filters */}
         <div className="grid gap-4 md:grid-cols-3 mb-8 bg-white/50 dark:bg-gray-950/50 backdrop-blur-sm rounded-lg p-4">
           <Input
@@ -73,7 +108,7 @@ export default function ClubsPage() {
         </div>
 
         {/* Club Grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 px-2">
           {filteredClubs.map((club) => (
             <ClubCard key={club.id} club={club} />
           ))}
@@ -81,11 +116,12 @@ export default function ClubsPage() {
 
         {filteredClubs.length === 0 && (
           <div className="text-center py-12 bg-white/50 dark:bg-gray-950/50 backdrop-blur-sm rounded-lg">
-            <p className="text-lg text-muted-foreground">No clubs found matching your criteria.</p>
+            <p className="text-lg text-muted-foreground">
+              No clubs found matching your criteria.
+            </p>
           </div>
         )}
       </div>
     </div>
-  )
+  );
 }
-

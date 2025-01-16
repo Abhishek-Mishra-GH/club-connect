@@ -5,11 +5,13 @@ import { Button } from "./ui/button";
 import { clubAtom, userAtom, followedClubsAtom } from "@/store/useStore";
 import { useAtom } from "jotai";
 import resetLocalStorage from "@/utils/resetLocalStorage";
+import { useRouter } from "next/navigation";
 
 export default function Logout() {
   const [user, setUser] = useAtom(userAtom);
   const [club, setClub] = useAtom(clubAtom);
   const [followedClubs, setFollowedClubs] = useAtom(followedClubsAtom);
+  const router = useRouter();
 
   return (
     <Button
@@ -19,6 +21,7 @@ export default function Logout() {
         setClub(null);
         setFollowedClubs([]);
         resetLocalStorage();
+        router.push('/');
       }}
     >
       Logout

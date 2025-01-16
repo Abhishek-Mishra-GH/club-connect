@@ -1,4 +1,4 @@
-const prisma = require('../prisma/prisma');
+const prisma = require("../prisma/prisma");
 const { uploadFileToS3 } = require("../services/s3Service");
 
 function transformEvents(events) {
@@ -27,24 +27,23 @@ exports.createEvent = async (req, res) => {
   const file = req.file;
 
   try {
-
     const club = await prisma.club.findUnique({
       where: {
-        id: clubId
+        id: clubId,
       },
 
       select: {
-        id: true
-      }
-    })
+        id: true,
+      },
+    });
 
-    if(!club) {
-      return res.status(401).json({message: "Unauthorized"});
+    if (!club) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     let imageUrl = null;
     // upload to s3
-    if(file) {
+    if (file) {
       imageUrl = await uploadFileToS3(file.buffer, file.mimetype, clubId);
     }
 
@@ -57,59 +56,84 @@ exports.createEvent = async (req, res) => {
         image: imageUrl || undefined,
         club: {
           connect: {
-            id: clubId
-          }
-        }
-      }
+            id: clubId,
+          },
+        },
+      },
     });
+
+    // fetch followers
+    const followers = await prisma.user.findMany({
+      where: { following: { some: { id: clubId } } },
+    });
+
+    // notify followers
+    for (const follower of followers) {
+      const emailContent = `Hi ${follower.name},\n\nThe club "${event.club.name}" has announced a new event: "${event.name}".\nDate: ${event.date}\nLocation: ${event.location}\n\nDon't miss it!`;
+
+      sendEmail(
+        follower.email,
+        `New Event from ${event.club.name}`,
+        emailContent
+      );
+
+      // Send in-app notification
+      sendNotification({
+        userId: follower.id,
+        clubId,
+        content: `The club "${event.club.name}" has announced a new event: "${event.name}".`,
+      });
+    }
+
     res.status(201).json(event);
   } catch (err) {
-    res.status(500).json({ message: 'Failed to create event' });
-    console.log(err)
-    console.log(err.message)
+    res.status(500).json({ message: "Failed to create event" });
+    console.log(err);
+    console.log(err.message);
   }
-}
+};
 
 exports.registerForEvent = async (req, res) => {
   const { eventId } = req.body;
   const userId = req.user.id;
 
-  if(!userId || !eventId) {
-    return res.status(400).json({ error: 'userId and eventId are required' });
+  if (!userId || !eventId) {
+    return res.status(400).json({ error: "userId and eventId are required" });
   }
 
   try {
     const event = await prisma.event.findUnique({
-      where: {id: eventId}
+      where: { id: eventId },
     });
 
     const existingRegistration = await prisma.registration.findUnique({
       where: {
-        userId_eventId: { userId, eventId }
-      }
-    })
+        userId_eventId: { userId, eventId },
+      },
+    });
 
     if (existingRegistration) {
-      return res.status(400).json({ error: 'User is already registered for this event' });
+      return res
+        .status(400)
+        .json({ error: "User is already registered for this event" });
     }
 
     const registration = await prisma.registration.create({
       data: {
         userId,
-        eventId
-      }
-    })
+        eventId,
+      },
+    });
 
     return res.status(201).json({
-      message: 'User successfully registered for the event.', registration
-    })
-
-  } catch(error) {
+      message: "User successfully registered for the event.",
+      registration,
+    });
+  } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: 'Something went wrong!' });
+    return res.status(500).json({ error: "Something went wrong!" });
   }
-}
-
+};
 
 exports.getAllEvents = async (req, res) => {
   const { userId } = req.query;
@@ -125,9 +149,9 @@ exports.getAllEvents = async (req, res) => {
 
         club: {
           select: {
-            city: true
-          }
-        }
+            city: true,
+          },
+        },
       },
     });
 
@@ -152,8 +176,8 @@ exports.getAllEvents = async (req, res) => {
 
     return res.status(200).json(transformedEvents);
   } catch (error) {
-    console.error('Error fetching events:', error);
-    return res.status(500).json({ message: 'Failed to fetch events.' });
+    console.error("Error fetching events:", error);
+    return res.status(500).json({ message: "Failed to fetch events." });
   }
 };
 
@@ -170,27 +194,24 @@ exports.getAllEventsByClubId = async (req, res) => {
         registrations: {
           select: {
             userId: true,
-          }
+          },
         },
 
         club: {
           select: {
-            city: true
-          }
-        }
-      }
-    })
+            city: true,
+          },
+        },
+      },
+    });
 
     const transformedEvents = transformEvents(events);
     return res.status(200).json(transformedEvents);
-
-
   } catch (err) {
     console.log(err.message);
     return res.status(500).json({ error: "Something went wrong!" });
   }
-  
-}
+};
 
 exports.getEventById = async (req, res) => {
   const { eventId, userId } = req.query;
@@ -208,7 +229,7 @@ exports.getEventById = async (req, res) => {
     });
 
     if (!event) {
-      return res.status(404).json({ message: 'Event not found.' });
+      return res.status(404).json({ message: "Event not found." });
     }
 
     const transformedEvent = {
@@ -230,7 +251,7 @@ exports.getEventById = async (req, res) => {
 
     res.status(200).json(transformedEvent);
   } catch (error) {
-    console.error('Error fetching event:', error);
-    res.status(500).json({ message: 'Failed to fetch event.' });
+    console.error("Error fetching event:", error);
+    res.status(500).json({ message: "Failed to fetch event." });
   }
 };

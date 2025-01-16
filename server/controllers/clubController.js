@@ -4,8 +4,6 @@ const { transformEvents } = require("../utils/transformEvents");
 
 exports.getAllClubs = async (req, res) => {
 
-  const userId = req.user.id;
-
   try {
     const clubs = await prisma.club.findMany({
       include: {

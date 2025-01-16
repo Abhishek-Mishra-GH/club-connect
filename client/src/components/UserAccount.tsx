@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { userAtom } from "@/store/useStore";
 import { useAtom } from "jotai";
 import axios from "axios";
+import Logout from "./Logout";
 
 export default function ClubProfilePage() {
   const [loading, setLoading] = useState(false);
@@ -19,8 +20,8 @@ export default function ClubProfilePage() {
     e.preventDefault();
     setLoading(true);
 
-    if(!user) return;
-    
+    if (!user) return;
+
     try {
       const formData = new FormData();
       formData.append("id", user.id);
@@ -28,27 +29,26 @@ export default function ClubProfilePage() {
       formData.append("city", user.city);
       formData.append("university", user.university);
 
-      if(avatar) {
-        formData.append('avatar', avatar);
+      if (avatar) {
+        formData.append("avatar", avatar);
       }
 
       const backend = process.env.NEXT_PUBLIC_BACKEND_SERVICE;
       const url = `${backend}/api/profile/save-profile?type=user`;
       const response = await axios.put(url, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-      const newData = {...user, avatar: response.data.profile.avatar}
+      const newData = { ...user, avatar: response.data.profile.avatar };
       setUser(newData);
       localStorage.setItem("userdata", JSON.stringify(newData));
     } catch (error: any) {
       console.log(error);
-      console.log(error.response)
+      console.log(error.response);
     }
 
     setLoading(false);
-  }
-
+  };
 
   if (loading) {
     return (
@@ -61,12 +61,17 @@ export default function ClubProfilePage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container py-8 mx-auto">
-        <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center">Profile</h1>
+        <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center text-cyan-600">
+          Profile
+        </h1>
 
         <Tabs defaultValue="details" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="details">Student Details</TabsTrigger>
-          </TabsList>
+          <div className="flex justify-between">
+            <TabsList>
+              <TabsTrigger value="details">User Details</TabsTrigger>
+            </TabsList>
+            <Logout />
+          </div>
 
           <TabsContent value="details">
             <Card>
@@ -80,11 +85,17 @@ export default function ClubProfilePage() {
                   <div>
                     <div className="space-y-2">
                       <Label htmlFor="name"> Name</Label>
-                      <Input id="name" onChange={(e) => setUser({...user!, name: e.target.value })} value={user?.name} />
+                      <Input
+                        id="name"
+                        onChange={(e) =>
+                          setUser({ ...user!, name: e.target.value })
+                        }
+                        value={user?.name}
+                      />
                     </div>
                   </div>
-                  <div className="flex gap-6 items-center">
-                  <div>
+                  <div className="flex gap-1 sm:gap-6 items-center">
+                    <div>
                       {user?.avatar ? (
                         <img
                           className="h-12 w-12 rounded-full"
@@ -98,7 +109,7 @@ export default function ClubProfilePage() {
                       )}
                     </div>
                     <div className="flex flex-col items-start gap-4">
-                    <Label>Change Profile Picture</Label>
+                      <Label>Change Profile Picture</Label>
                       <input
                         type="file"
                         accept="image/*"
@@ -112,11 +123,23 @@ export default function ClubProfilePage() {
                   <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="city">City</Label>
-                      <Input id="city" onChange={(e) => setUser({...user!, city: e.target.value })} value={user?.city} />
+                      <Input
+                        id="city"
+                        onChange={(e) =>
+                          setUser({ ...user!, city: e.target.value })
+                        }
+                        value={user?.city}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="uni">University</Label>
-                      <Input id="uni" onChange={(e) => setUser({...user!, university: e.target.value })} value={user?.university} />
+                      <Input
+                        id="uni"
+                        onChange={(e) =>
+                          setUser({ ...user!, university: e.target.value })
+                        }
+                        value={user?.university}
+                      />
                     </div>
                   </div>
 
