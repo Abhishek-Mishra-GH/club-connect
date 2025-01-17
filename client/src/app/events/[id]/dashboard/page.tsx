@@ -219,9 +219,6 @@ export default function EventDashboard() {
                               {user.city}
                             </div>
                           </div>
-                          <div className="text-sm text-muted-foreground">
-                            Registered {(new Date(user?.registrationDate!).toLocaleDateString())}
-                          </div>
                         </CardContent>
                       </Card>
                     ))}

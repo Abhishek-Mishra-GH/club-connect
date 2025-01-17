@@ -62,8 +62,10 @@ export default function PostsPage() {
         console.log(err);
       })
       .finally(() => {
-        router.refresh();
         setLoading(false);
+        setNewPostContent('');
+        setImage(null);
+        router.refresh();
       });
   }
 

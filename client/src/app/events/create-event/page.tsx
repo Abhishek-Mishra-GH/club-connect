@@ -70,11 +70,11 @@ export default function page() {
         setError(err.response.data.message);
       })
       .finally(() => {
+        router.push("/events");
         setLoading(false);
       });
 
-      router.push("/events");
-
+      
   }
 
   if(!configLoaded) {
