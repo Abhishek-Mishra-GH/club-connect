@@ -20,6 +20,9 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/', (req, res) => {
+  res.send("Hello, This is working!");
+})
 
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
