@@ -1,5 +1,6 @@
 const prisma = require("../prisma/prisma");
 const { uploadFileToS3 } = require("../services/s3Service");
+const { sendEmail } = require("../services/emailService");
 
 function transformEvents(events) {
   return events.map((event) => ({
@@ -58,6 +59,7 @@ exports.createEvent = async (req, res) => {
           connect: {
             id: clubId,
           },
+
         },
       },
     });
