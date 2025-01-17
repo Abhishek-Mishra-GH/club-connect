@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 import { clubAtom, userAtom } from "@/store/useStore"
 import LoadingButton from "@/components/LoadingButton"
 import { useAtom } from "jotai"
+import Loading from "../loading"
 
 export default function page() {
   const [user, setUser] = useAtom(userAtom);
@@ -14,11 +15,10 @@ export default function page() {
   const router = useRouter();
 
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const handleLoginForm = (e: any) => {
     e.preventDefault();
-    setLoading(true);
 
     const email = e.target.email.value;
     const password = e.target.password.value;
@@ -78,6 +78,14 @@ export default function page() {
         setLoading(false);
       })
   }
+
+    if (loading) {
+      return (
+        <div className="h-[calc(100vh-120px)] w-screen flex justify-center items-center">
+          <Loading/>
+        </div>
+      );
+    }
 
   return (
     <div className="w-full h-[calc(100vh-60px)] flex justify-center items-center bg-gray-100">
