@@ -20,4 +20,6 @@ router.get('/:clubId', getAllEventsByClubId)
 router.post('/register', verifyToken, registerForEvent)
 router.delete('/:eventId', verifyClubToken, deleteEventById)
 
+// test
+
 module.exports = router;
