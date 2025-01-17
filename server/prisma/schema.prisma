@@ -10,72 +10,66 @@ datasource db {
 model User {
   id           String         @id @default(cuid())
   name         String
-  avatar       String?
-  university   String
-  city         String
   email        String         @unique
   password     String
-  Registration Registration[]
-  following    Club[]         @relation("UserFollowing") // optional
+  avatar       String?
+  city         String
+  university   String
   Notification Notification[]
+  Registration Registration[]
+  following    Club[]         @relation("UserFollowing")
 }
 
 model Club {
   id           String         @id @default(cuid())
+  name         String
+  description  String
   email        String         @unique
   password     String
-  name         String
-  university   String
-  founded      Int
-  city         String
-  description  String
   category     String
+  founded      Int
   memberCount  Int
-  avatar       String? // optional
-  followers    User[]         @relation("UserFollowing") // optional 
-  events       Event[] // optional
-  posts        Post[] // optional
+  university   String
+  city         String
+  avatar       String?
+  events       Event[]
   Notification Notification[]
-}
-
-enum EventStatus {
-  UPCOMING
-  ONGOING
-  COMPLETED
-  CANCELLED
+  posts        Post[]
+  followers    User[]         @relation("UserFollowing")
 }
 
 model Event {
   id            String         @id @default(cuid())
-  name          String
   description   String
-  image         String?
+  clubId        String
   date          DateTime
   location      String
-  clubId        String
+  name          String
+  image         String?
   status        EventStatus    @default(UPCOMING)
+  club          Club           @relation(fields: [clubId], references: [id], onDelete: Cascade)
   registrations Registration[]
-  club          Club           @relation(fields: [clubId], references: [id])
 }
 
 model Registration {
-  id      String @id @default(cuid())
-  userId  String
-  eventId String
-  user    User   @relation(fields: [userId], references: [id])
-  event   Event  @relation(fields: [eventId], references: [id])
+  id        String   @id @default(cuid())
+  userId    String
+  eventId   String
+  createdAt DateTime @default(now())
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, eventId])
-  @@index([eventId, userId], name: "event_user_index")
+  @@index([eventId, userId], map: "event_user_index")
 }
 
 model Post {
-  id          String   @id @default(cuid())
-  content     String
-  image       String?  // Optional image for posts
-  clubId      String
-  createdAt   DateTime @default(now())
-  club        Club     @relation(fields: [clubId], references: [id])
+  id        String   @id @default(cuid())
+  content   String
+  clubId    String
+  createdAt DateTime @default(now())
+  image     String?
+  club      Club     @relation(fields: [clubId], references: [id])
 }
 
 model Notification {
@@ -84,7 +78,14 @@ model Notification {
   createdAt DateTime @default(now())
   userId    String
   clubId    String?
+  isRead    Boolean  @default(false)
   club      Club?    @relation(fields: [clubId], references: [id])
   user      User     @relation(fields: [userId], references: [id])
-  isRead    Boolean  @default(false)
+}
+
+enum EventStatus {
+  UPCOMING
+  ONGOING
+  COMPLETED
+  CANCELLED
 }

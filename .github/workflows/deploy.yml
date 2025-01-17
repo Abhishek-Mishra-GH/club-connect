@@ -1,0 +1,32 @@
+name: Deploy Server to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main # Trigger only on changes to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up SSH access to your droplet
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.DROPLET_SSH_KEY }}
+
+      # Step 3: Deploy the server folder
+      - name: Deploy Server to DigitalOcean
+        run: |
+          ssh -o StrictHostKeyChecking=no root@139.59.25.197 << 'EOF'
+          cd clubconnect/server # Navigate to the server directory on the droplet
+          git pull origin main # Pull the latest changes
+          cd server # Move to the server folder
+          npm install # Install dependencies
+          pm2 restart server --update-env # Restart the server using PM2
+          EOF

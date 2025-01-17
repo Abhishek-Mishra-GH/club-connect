@@ -102,10 +102,6 @@ exports.registerForEvent = async (req, res) => {
   }
 
   try {
-    const event = await prisma.event.findUnique({
-      where: { id: eventId },
-    });
-
     const existingRegistration = await prisma.registration.findUnique({
       where: {
         userId_eventId: { userId, eventId },
@@ -253,5 +249,74 @@ exports.getEventById = async (req, res) => {
   } catch (error) {
     console.error("Error fetching event:", error);
     res.status(500).json({ message: "Failed to fetch event." });
+  }
+};
+
+
+exports.getEventStats = async (req, res) => {
+  const eventId = req.params.eventId;
+
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+      include: {
+        registrations: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                city: true,
+                university: true,
+              }
+            },
+            createdAt: true,
+          }
+        },
+        club: {
+          select: {
+            category: true,
+          }
+        }
+      }
+    })
+
+    const transformedEvent = {
+      id: event.id,
+      title: event.name,
+      location: event.location,
+      description: event.description,
+      date: event.date,
+      time: new Date(event.date).toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      image: event.image,
+      category: event.club.category,
+      registeredUsers: event.registrations.map(reg => {
+        return {...reg.user, registrationDate: reg.createdAt }
+      }),
+    };
+
+    res.status(200).json(transformedEvent);
+  } catch (error) {
+    console.error("Error fetching event:", error);
+    res.status(500).json({ message: "Failed to fetch event." });
+  }
+}
+
+exports.deleteEventById = async (req, res) => {
+  const eventId = req.params.eventId
+  try {
+    const deletedEvent = await prisma.event.delete({
+      where: {
+        id: eventId,
+      },
+    });
+    console.log('deleted');
+    res.status(200).json({message: "Event deleted successfully", deletedEvent});
+  } catch (error) {
+    console.error("Error deleting event:", error); // Log any errors
+    res.status(500).json({ message: "Failed to delete event.", error: error.message });
   }
 };

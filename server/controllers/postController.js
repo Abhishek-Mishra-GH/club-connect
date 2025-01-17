@@ -1,4 +1,5 @@
-const { createPost, getAllPostsByFollowers, getAllPosts } = require("../services/postService");
+const { createPost, getAllPostsByFollowers, getAllPosts, getAllPostsByClubId } = require("../services/postService");
+
 
 const createPostController = async (req, res) => {
   const { clubId, content } = req.body;
@@ -35,8 +36,21 @@ const getAllPostsController = async (req, res) => {
   }
 };
 
+const getAllPostsByClubIdController = async (req, res) => {
+  const clubId = req.params.cludId;
+
+  try {
+    const posts = await getAllPostsByClubId(clubId);
+    res.status(200).json(posts)
+  } catch (error) {
+    console.log("Error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 module.exports = {
   createPostController,
   getAllPostsByFollowersController,
-  getAllPostsController
+  getAllPostsController,
+  getAllPostsByClubIdController
 };

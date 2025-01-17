@@ -30,7 +30,9 @@ exports.getClubByIdWithUserFollowing = async (req, res) => {
               select: {
                 city: true,
               }
-            }
+            },
+
+            registrations: true,
           }
         }
       },

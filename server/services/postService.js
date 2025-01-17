@@ -53,7 +53,7 @@ const getAllPostsByFollowers = async (userId) => {
 };
 
 const getAllPosts = async () => {
-  return prisma.post.findMany({
+  const posts = await prisma.post.findMany({
     orderBy: { createdAt: "desc" },
     include: {
       club: {
@@ -65,10 +65,31 @@ const getAllPosts = async () => {
       }
     }
   });
+
+  return posts;
 };
+
+const getAllPostsByClubId = async (clubId) => {
+  const posts = await prisma.post.findMany({
+    where: {id: clubId},
+    orderBy: { createdAt: "desc" },
+    include: {
+      club: {
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+        }
+      }
+    }
+  })
+
+  return posts;
+}
 
 module.exports = {
   createPost,
   getAllPostsByFollowers,
   getAllPosts,
+  getAllPostsByClubId,
 };
