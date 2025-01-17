@@ -28,5 +28,5 @@ jobs:
           git pull origin master # Pull the latest changes
           cd server # Move to the server folder
           npm install # Install dependencies
-          pm2 restart server --update-env # Restart the server using PM2
+          pm2 restart clubconnect --update-env # Restart the server using PM2
           EOF
