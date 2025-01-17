@@ -37,12 +37,12 @@ export default function page() {
 
         if(!isClub) {
           const userData = {
-            id: entity.id,
-            name: entity.name,
-            email: entity.email,
-            avatar: entity.avatar,
-            university: entity.university,
-            city: entity.city
+            id: entity?.id,
+            name: entity?.name,
+            email: entity?.email,
+            avatar: entity?.avatar,
+            university: entity?.university,
+            city: entity?.city
           };
 
           setUser(userData);
@@ -50,18 +50,17 @@ export default function page() {
           localStorage.setItem("userdata", JSON.stringify(userData));
           localStorage.setItem("userid", entity.id);
         } else {
-
           const clubData = {
-            id: entity.id,
-            name: entity.name,
-            email: entity.email,
-            description: entity.description,
-            avatar: entity.avatar,
-            numFollowers: entity.followers.length,
-            memberCount: entity.memberCount,
-            category: entity.category,
-            university: entity.university,
-            city: entity.city,
+            id: entity?.id,
+            name: entity?.name,
+            email: entity?.email,
+            description: entity?.description,
+            avatar: entity?.avatar,
+            numFollowers: entity?.followers.length,
+            memberCount: entity?.memberCount,
+            category: entity?.category,
+            university: entity?.university,
+            city: entity?.city,
             founded: entity.founded,
           }
 
