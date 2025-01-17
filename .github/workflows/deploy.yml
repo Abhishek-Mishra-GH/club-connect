@@ -24,7 +24,7 @@ jobs:
       - name: Deploy Server to DigitalOcean
         run: |
           ssh -o StrictHostKeyChecking=no root@139.59.25.197 << 'EOF'
-          cd clubconnect/server # Navigate to the server directory on the droplet
+          cd club-connect/server # Navigate to the server directory on the droplet
           git pull origin main # Pull the latest changes
           cd server # Move to the server folder
           npm install # Install dependencies
