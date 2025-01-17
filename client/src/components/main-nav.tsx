@@ -17,10 +17,13 @@ export function MainNav() {
 
   return (
     <header className="sticky top-0 z-50  flex justify-center items-center w-full border-b bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-cyan-50/20 shadow-sm">
-      <div className="container flex h-16 sm:h-20 items-center mx-2 sm:mx-8">
+      <div className="container flex h-16 sm:h-20 items-center mx-3 sm:mx-8">
         <div className="mr-4 flex">
           <Link className="mr-6 flex items-center space-x-2" href="/">
-            <span className=" font-bold text-lg inline-block">ClubConnect</span>
+            <div className="flex items-center gap-1.5">
+              <img src="clubconnectlogo.png" alt="logo" className="h-9 w-9 rounded-full object-contain"/>
+            <span className="text-lg sm:text-xl font-semibold inline-block"><span className=" text-cyan-600">Club</span>Connect</span>
+            </div>
           </Link>
           <nav className="hidden sm:flex items-center space-x-6 text-lg font-medium">
             <NavLink href="/events">Events</NavLink>

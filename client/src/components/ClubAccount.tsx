@@ -15,6 +15,7 @@ import { useAtom } from "jotai";
 import axios from "axios";
 import CreateEventBtn from "./CreateEventBtn";
 import Logout from "./Logout";
+import Link from "next/link";
 
 export default function ClubProfilePage() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -88,7 +89,7 @@ export default function ClubProfilePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container py-8 mx-auto">
+      <div className="container py-8 mx-auto px-3">
         <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center text-cyan-600">Club Profile Management</h1>
 
         <Tabs defaultValue="details" className="space-y-4">
@@ -198,11 +199,15 @@ export default function ClubProfilePage() {
                 {/* Events Grid */}
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {events.map((event) => {
-                    return <EventCard key={event.id} event={event} />;
+                    return <div key={event.id} className="w-full border-cyan-600 shadow-sm bg-white rounded-xl">
+                      <EventCard event={event} />
+                      <Link href={`/events/${event.id}/dashboard`}>
+                      <Button className="w-full py-3">
+                        View Event
+                      </Button>
+                      </Link>
+                    </div>;
                   })}
-                  {/* {events.map((event) => (
-                    <EventCard key={event.id} event={event} />
-                  ))} */}
                 </div>
               </CardContent>
             </Card>

@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarIcon, MapPinIcon, Users } from "lucide-react";
+import { CalendarIcon, Clock, MapPinIcon, Users } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -55,7 +55,9 @@ export function EventCard({ event }: EventCardProps) {
         <CardTitle className="text-xl">{event.name}</CardTitle>
         <CardDescription className="flex items-center gap-2">
           <CalendarIcon className="h-4 w-4" />
-          {event.date.toLocaleDateString() + " " + event.time}
+          {event.date.toLocaleDateString()}
+          <Clock className="h-3.5 w-3.5 ml-2" />
+          {event.time}
         </CardDescription>
       </CardHeader>
       <CardContent>

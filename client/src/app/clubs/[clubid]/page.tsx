@@ -2,54 +2,32 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EventCard } from "@/components/event-card";
-import { MemberAvatar } from "@/components/member-avatar";
-import { Club, ClubMember } from "@/types/club";
-import { BadgeCheck, CalendarDays, Users } from "lucide-react";
+import { Club } from "@/types/club";
+import {
+  Building2,
+  Calendar,
+  Mail,
+  MapPin,
+  Users,
+} from "lucide-react";
 import FollowClubBtn from "@/components/FollowClubBtn";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { mapBackendToFrontendEvent } from "@/utils/mapBackendToFrontendEvent";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-// const events: any = [
-//   {
-//     id: "1",
-//     title: "Annual Hackathon 2024",
-//     date: new Date("2024-03-15"),
-//     location: "University Tech Center",
-//     description: "24-hour coding challenge with amazing prizes and opportunities to network with industry professionals.",
-//     image: "/placeholder.svg?height=200&width=400",
-//     numRegistered: 35
-//   },
-//   {
-//     id: "2",
-//     title: "Web Development Workshop",
-//     date: new Date("2024-02-20"),
-//     location: "Computer Science Building, Room 101",
-//     description: "Learn the basics of web development with React and Next.js. Perfect for beginners!",
-//     image: "/placeholder.svg?height=200&width=400",
-//     numRegistered: 45
-//   },
-//   {
-//     id: "3",
-//     title: "Tech Industry Panel",
-//     date: new Date("2024-02-28"),
-//     location: "Virtual Event",
-//     description: "Join us for an insightful discussion with tech industry leaders about career opportunities and industry trends.",
-//     image: "/placeholder.svg?height=200&width=400",
-//     numRegistered: 67
-//   }
-// ]
-
-const members: ClubMember[] = [
-  {
-    id: "1",
-    name: "Sarah Johnson",
-    role: "President",
-    avatar: "/placeholder.svg?height=100&width=100",
-  },
-];
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@radix-ui/react-select";
+import { Badge } from "@/components/ui/badge";
+import { Post } from "@/types/post";
+import { PostCard } from "@/components/post-card";
 
 export default function page() {
   const [clubData, setClubData] = useState<Club>({
@@ -66,6 +44,7 @@ export default function page() {
     avatar: "",
   });
   const [events, setEvents] = useState<Event[] | null>(null);
+  const [posts, setPosts] = useState<Post[] | null>(null);
   const [following, setFollowing] = useState(false);
   const { clubid } = useParams();
 
@@ -81,7 +60,9 @@ export default function page() {
 
   useEffect(() => {
     const userid = localStorage.getItem("userid");
-    const url = `${process.env.NEXT_PUBLIC_BACKEND_SERVICE}/api/clubs/${clubid}/${userid}`;
+    const backend = process.env.NEXT_PUBLIC_BACKEND_SERVICE;
+    const url = `${backend}/api/clubs/${clubid}/${userid}`;
+    const postsRouteUrl = `${backend}/api/posts/${clubid}`;
 
     axios.get(url).then((response) => {
       const cdata = response.data.club;
@@ -99,6 +80,11 @@ export default function page() {
         avatar: cdata.avatar,
       });
 
+      axios.get(postsRouteUrl).then((response) => {
+        const pData = response.data;
+        setPosts(pData);
+      });
+
       const backendEvents = response.data.events;
       const eventsData = backendEvents.map((backendEvent: any) =>
         mapBackendToFrontendEvent(backendEvent)
@@ -111,168 +97,128 @@ export default function page() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background mt-2">
-      {/* Hero Section */}
-      <div className="relative container mx-auto rounded-lg backdrop:blur-md shadow-md mb-2 mt-4 px-2 sm:px-4 py-4 border-2">
-        <div className="flex items-center gap-6 justify-center">
-          <Avatar className="h-12 w-12 md:h-16 md:w-16">
-            <AvatarImage
-              src={clubData.avatar ? clubData.avatar : undefined}
-              alt={clubData.name}
-            />
-            <AvatarFallback>{clubData.name[0]}</AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col gap-2">
-            <h1 className="text-xl md:text-3xl font-bold text-black mb-1">
-              {clubData?.name}
-            </h1>
-            <h3 className="text-black/95 text-lg md:text-xl">{clubData?.university}</h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-              <div className="px-2 py-1 rounded-full bg-cyan-100 text-cyan-600 text-md font-medium dark:bg-cyan-950 dark:text-cyan-200 flex justify-center items-center mr-1">
-                {clubData?.numFollowers
-                  ? clubData.numFollowers + " Followers"
-                  : "0 Followers"}{" "}
-              </div>
-              <div className="px-2 py-1 rounded-full bg-cyan-100 text-cyan-600 text-md font-medium dark:bg-cyan-950 dark:text-cyan-200 flex justify-center items-center mr-1">
-                {clubData.category}
-              </div>
-              <div className="px-2 py-1 rounded-full bg-cyan-100 text-cyan-600 text-md font-medium dark:bg-cyan-950 dark:text-cyan-200 flex justify-center items-center mr-1">
-                {clubData.city}
-              </div>
-            </div>
-          </div>
-          <div>
-            <FollowClubBtn
-              incrFollow={incrFollow}
-              decrFollow={descrFollow}
-              setFollowing={setFollowing}
-              following={following}
-              clubId={clubData ? clubData.id : ""}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="container py-8 mx-auto">
-        <div className="grid lg:grid-cols-3 gap-8 place-content-center">
-          {/* Left Column - Club Info */}
-          <div className="lg:col-span-2 space-y-8">
-            <div className="prose dark:prose-invert px-2">
-              <h2 className="text-2xl font-bold">About Us</h2>
-              <p>{clubData?.description}</p>
-            </div>
-
-            {events && (
-              <div>
-                <h2 className="text-2xl font-bold mb-4">Upcoming Events</h2>
-                <div className="grid sm:grid-cols-2 gap-4 px-4">
-                  {events.map((event: any) => (
-                    <EventCard key={event.id} event={event} />
-                  ))}
+    <div className="min-h-screen bg-gradient-to-b from-cyan-50 to-white dark:from-cyan-950">
+      <div className="container mx-auto py-8 px-3">
+        <div className="grid gap-6 md:grid-cols-3">
+          <div className="md:col-span-1 space-y-6">
+            <Card className="sticky top-6">
+              <CardHeader className="text-center">
+                <Avatar className="w-24 h-24 mx-auto mb-4">
+                  <AvatarImage src={clubData.avatar} alt={clubData.name} />
+                  <AvatarFallback>{clubData.name[0]}</AvatarFallback>
+                </Avatar>
+                <CardTitle className="text-2xl">{clubData.name}</CardTitle>
+                <CardDescription>{clubData.university}</CardDescription>
+                <div className="flex flex-wrap gap-2 justify-center mt-2">
+                  <Badge
+                    variant={"secondary"}
+                    className="bg-cyan-100 text-cyan-600 dark:bg-cyan-950 dark:text-cyan-200"
+                  >
+                    {clubData.city}
+                  </Badge>
+                  <Badge
+                    variant={"secondary"}
+                    className="bg-cyan-100 text-cyan-600 dark:bg-cyan-950 dark:text-cyan-200"
+                  >
+                    {clubData.category}
+                  </Badge>
                 </div>
-              </div>
-            )}
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <p className="text-sm text-muted-foreground">
+                  {clubData.description}
+                </p>
 
-            {/* <div>
-              <h2 className="text-2xl font-bold mb-4">Club Leadership</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {members.map((member) => (
-                  <MemberAvatar key={member.id} member={member} />
-                ))}
-              </div>
-            </div> */}
+                <div className="grid grid-cols-2 gap-4 py-4 border-y">
+                  <div className="text-center">
+                    <p className="text-2xl font-bold text-cyan-600">
+                      {clubData.memberCount}
+                    </p>
+                    <p className="text-sm text-muted-foreground">Members</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-2xl font-bold text-cyan-600">
+                      {clubData.numFollowers}
+                    </p>
+                    <p className="text-sm text-muted-foreground">Followers</p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Building2 className="h-4 w-4" />
+                    Founded in {clubData.founded}
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <MapPin className="h-4 w-4" />
+                    {clubData.city}
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Mail className="h-4 w-4" />
+                    {clubData.email}
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-3">
+                  <FollowClubBtn
+                    incrFollow={incrFollow}
+                    decrFollow={descrFollow}
+                    setFollowing={setFollowing}
+                    following={following}
+                    clubId={clubData?.id || ""}
+                  />
+                  <Button
+                    className="w-full"
+                    variant="outline"
+                    onClick={() =>
+                      (window.location.href = `mailto:${clubData.email}`)
+                    }
+                  >
+                    <Mail className="mr-2 h-4 w-4" />
+                    Contact Club
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
-          {/* Right Column - Stats & Management */}
-          <div className="space-y-6">
-            <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-              <div className="p-6 space-y-4">
-                <h3 className="text-xl font-semibold">Club Statistics</h3>
-                <div className="space-y-4 px-4">
-                  <div className="flex items-center gap-4">
-                    <Users className="h-5 w-5 text-muted-foreground" />
-                    <div>
-                      <p className="text-sm font-medium leading-none">
-                        {clubData?.memberCount} Members
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        Active community
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <CalendarDays className="h-5 w-5 text-muted-foreground" />
-                    <div>
-                      <p className="text-sm font-medium leading-none">
-                        Founded {clubData?.founded}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {new Date().getFullYear() -
-                          (clubData ? clubData.founded : 0)}{" "}
-                        years of excellence
-                      </p>
-                    </div>
-                  </div>
-                  {/* <div className="flex items-center gap-4">
-                    <BadgeCheck className="h-5 w-5 text-muted-foreground" />
-                    <div>
-                      <p className="text-sm font-medium leading-none">
-                        Verified Club
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        University recognized
-                      </p>
-                    </div>
-                  </div> */}
-                </div>
-              </div>
-            </div>
-
-            {/* <Tabs defaultValue="announcements" className="w-full">
+          {/* Content Area */}
+          <div className="md:col-span-2">
+            <Tabs defaultValue="events" className="space-y-6">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="announcements">Announcements</TabsTrigger>
-                <TabsTrigger value="resources">Resources</TabsTrigger>
+                <TabsTrigger value="events">
+                  <Calendar className="mr-2 h-4 w-4" />
+                  Events
+                </TabsTrigger>
+                <TabsTrigger value="posts">
+                  <Users className="mr-2 h-4 w-4" />
+                  Posts
+                </TabsTrigger>
               </TabsList>
-              <TabsContent
-                value="announcements"
-                className="border rounded-lg p-4 mt-2"
-              >
-                <div className="space-y-4">
-                  <div>
-                    <p className="font-medium">New Workshop Series!</p>
-                    <p className="text-sm text-muted-foreground">
-                      Posted 2 days ago
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Meeting Room Changed</p>
-                    <p className="text-sm text-muted-foreground">
-                      Posted 5 days ago
-                    </p>
-                  </div>
+
+              <TabsContent value="events">
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {events &&
+                    events.map((event: any) => (
+                      <EventCard key={event.id} event={event} />
+                    ))}
                 </div>
               </TabsContent>
-              <TabsContent
-                value="resources"
-                className="border rounded-lg p-4 mt-2"
-              >
-                <div className="space-y-4">
-                  <div>
-                    <p className="font-medium">Workshop Slides</p>
-                    <p className="text-sm text-muted-foreground">
-                      Download PDF
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Club Constitution</p>
-                    <p className="text-sm text-muted-foreground">
-                      View Document
-                    </p>
-                  </div>
-                </div>
+
+              <TabsContent value="posts" className="space-y-4">
+                {posts ? (
+                  posts.map((post) => <PostCard key={post.id} post={post} />)
+                ) : (
+                  <Card>
+                    <CardContent className="text-center py-6">
+                      <p className="text-muted-foreground">No posts yet</p>
+                    </CardContent>
+                  </Card>
+                )}
               </TabsContent>
-            </Tabs> */}
+            </Tabs>
           </div>
         </div>
       </div>
