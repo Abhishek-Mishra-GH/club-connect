@@ -24,7 +24,8 @@ const Search: React.FC = () => {
     setExpanded((expanded) => !expanded);
     setIsSearching(true);
     try {
-      const response = await axios.get<SearchResult>(`http://localhost:8080/api/search?q=${query}`);
+      const backend = process.env.NEXT_PUBLIC_BACKEND_SERVICE
+      const response = await axios.get<SearchResult>(`${backend}/api/search?q=${query}`);
       console.log(response.data)
       setResults(response.data);
     } catch (error) {
