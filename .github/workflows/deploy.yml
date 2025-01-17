@@ -25,7 +25,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no root@139.59.25.197 << 'EOF'
           cd club-connect/server # Navigate to the server directory on the droplet
-          git pull origin main # Pull the latest changes
+          git pull origin master # Pull the latest changes
           cd server # Move to the server folder
           npm install # Install dependencies
           pm2 restart server --update-env # Restart the server using PM2
