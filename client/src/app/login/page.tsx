@@ -84,7 +84,9 @@ export default function page() {
     <div className="w-full h-[calc(100vh-60px)] flex justify-center items-center bg-gray-100">
       {/* login card */}
       <div className="border-2  shadow-xl bg-white rounded-lg px-4 py-6 w-[400px]">
-        <form className="flex flex-col gap-4" onSubmit={handleLoginForm}>
+        <form className="flex flex-col gap-4" onSubmit={(e: any) => {
+          handleLoginForm(e);
+        }}>
           <input
             required
             className="border-2 rounded-sm px-4 py-2 text-lg"
