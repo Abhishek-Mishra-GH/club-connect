@@ -61,12 +61,12 @@ export default function page() {
   };
 
   return (
-    <div className="w-full min-h-[calc(100vh-80px)] flex justify-center items-center bg-gray-100">
+    <div className="w-full min-h-[calc(100vh-80px)] flex justify-center items-center bg-gray-100 px-3 py-8">
       <form
         onSubmit={handleClubRegisterForm}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-3 bg-white border-2 p-4 min-w-[380px] rounded-lg shadow-md"
+        className="grid grid-cols-1 gap-3 bg-white border-2 py-4 px-2 mx-2 min-w-[380px] rounded-lg shadow-md"
       >
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col col-span-2 md:col-span-1">
           <CustomLabel htmlFor="clubName">Club Name</CustomLabel>
           <br />
           <input
@@ -82,7 +82,7 @@ export default function page() {
             placeholder="ClubConnect"
           />
         </div>
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col col-span-2 md:col-span-1">
           <CustomLabel htmlFor="university">University</CustomLabel>
           <br />
           <input
@@ -98,7 +98,7 @@ export default function page() {
             placeholder="Name of the university"
           />
         </div>
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col col-span-2 md:col-span-1">
           <CustomLabel htmlFor="city">City</CustomLabel>
           <br />
           <input
@@ -114,7 +114,7 @@ export default function page() {
             placeholder="Bhopal"
           />
         </div>
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col col-span-2 md:col-span-1">
           <CustomLabel htmlFor="clubCategory">Category</CustomLabel>
           <br />
           <input
@@ -146,7 +146,7 @@ export default function page() {
           />
         </div>
         {/* other details */}
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col col-span-2 md:col-span-1">
           <CustomLabel htmlFor="founded">Founded In</CustomLabel>
           <br />
           <input
@@ -163,7 +163,7 @@ export default function page() {
           />
         </div>
 
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col col-span-2 md:col-span-1">
           <CustomLabel htmlFor="totalMembers">Total Members</CustomLabel>
           <br />
           <input
@@ -181,7 +181,7 @@ export default function page() {
         </div>
             
         {/* other details */}
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col col-span-2 md:col-span-1">
           <CustomLabel htmlFor="clubEmail">Club Email</CustomLabel>
           <br />
           <input
@@ -197,7 +197,7 @@ export default function page() {
             placeholder="Club email"
           />
         </div>
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col col-span-2 md:col-span-1">
           <CustomLabel htmlFor="clubPassword">Password</CustomLabel>
           <br />
           <input

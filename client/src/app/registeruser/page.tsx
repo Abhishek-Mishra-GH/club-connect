@@ -50,7 +50,8 @@ export default function page() {
   };
 
   return (
-    <div className="w-full bg-gray-100 h-[calc(100vh-60px)] flex justify-center items-center">
+    <div className="w-screen bg-gradient-to-b from-cyan-50 to-white min-h-screen">
+      <div className="container mx-auto px-3 py-8 flex justify-center">
       <form
         onSubmit={handleRegisterForm}
         className="flex flex-col gap-3 bg-white border-2 rounded-lg shadow-lg p-4 w-[400px]"
@@ -144,13 +145,14 @@ export default function page() {
           disabled={loading}
           type="submit"
           className={twMerge(
-            "border-2 rounded-lg px-4 py-2 text-white bg-black hover:bg-gray-700",
-            loading && "bg-gray-700"
+            "rounded-md px-4 py-2 text-white bg-cyan-600 hover:bg-cyan-600/60",
+            loading && "bg-cyan-600/60"
           )}
         >
           Register
         </button>
       </form>
+      </div>
     </div>
   );
 }
