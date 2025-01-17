@@ -76,18 +76,11 @@ exports.createEvent = async (req, res) => {
         `New Event from ${event.club.name}`,
         emailContent
       );
-
-      // Send in-app notification
-      sendNotification({
-        userId: follower.id,
-        clubId,
-        content: `The club "${event.club.name}" has announced a new event: "${event.name}".`,
-      });
     }
 
     res.status(201).json(event);
   } catch (err) {
-    res.status(500).json({ message: "Failed to create event", err, msg:err.message });
+    res.status(500).json({ message: "Failed to create event", msg: err.message });
   }
 };
 
@@ -268,7 +261,6 @@ exports.getEventStats = async (req, res) => {
                 university: true,
               }
             },
-            createdAt: true,
           }
         },
         club: {
@@ -292,7 +284,7 @@ exports.getEventStats = async (req, res) => {
       image: event.image,
       category: event.club.category,
       registeredUsers: event.registrations.map(reg => {
-        return {...reg.user, registrationDate: reg.createdAt }
+        return {...reg.user }
       }),
     };
 
