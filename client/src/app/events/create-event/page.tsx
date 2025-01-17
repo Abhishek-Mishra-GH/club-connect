@@ -63,7 +63,7 @@ export default function page() {
         },
       })
       .then((response) => {
-        router.push("/profile");
+        console.log(response.data);
       })
       .catch((err) => {
         console.log(err.response);
@@ -72,6 +72,9 @@ export default function page() {
       .finally(() => {
         setLoading(false);
       });
+
+      router.push("/events");
+
   }
 
   if(!configLoaded) {
