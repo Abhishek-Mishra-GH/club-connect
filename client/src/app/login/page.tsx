@@ -74,7 +74,6 @@ export default function page() {
       })
       .catch(err => {
         console.error(err);
-        setError(err.response.data.message);
       })
       .finally(() => {
         setLoading(false);
