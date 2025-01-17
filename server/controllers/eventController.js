@@ -301,7 +301,7 @@ exports.getEventStats = async (req, res) => {
     res.status(200).json(transformedEvent);
   } catch (error) {
     console.error("Error fetching event:", error);
-    res.status(500).json({ message: "Failed to fetch event." });
+    res.status(500).json({ message: "Failed to fetch event.", error, msg: error.message });
   }
 }
 
