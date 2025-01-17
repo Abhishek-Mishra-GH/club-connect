@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation"
 import { clubAtom, userAtom } from "@/store/useStore"
 import LoadingButton from "@/components/LoadingButton"
 import { useAtom } from "jotai"
-import Loading from "../loading"
 
 export default function page() {
   const [user, setUser] = useAtom(userAtom);
@@ -15,10 +14,11 @@ export default function page() {
   const router = useRouter();
 
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleLoginForm = (e: any) => {
     e.preventDefault();
+    setLoading(true);
 
     const email = e.target.email.value;
     const password = e.target.password.value;
@@ -37,12 +37,12 @@ export default function page() {
 
         if(!isClub) {
           const userData = {
-            id: entity?.id,
-            name: entity?.name,
-            email: entity?.email,
-            avatar: entity?.avatar,
-            university: entity?.university,
-            city: entity?.city
+            id: entity.id,
+            name: entity.name,
+            email: entity.email,
+            avatar: entity.avatar,
+            university: entity.university,
+            city: entity.city
           };
 
           setUser(userData);
@@ -50,17 +50,18 @@ export default function page() {
           localStorage.setItem("userdata", JSON.stringify(userData));
           localStorage.setItem("userid", entity.id);
         } else {
+
           const clubData = {
-            id: entity?.id,
-            name: entity?.name,
-            email: entity?.email,
-            description: entity?.description,
-            avatar: entity?.avatar,
-            numFollowers: entity?.followers.length,
-            memberCount: entity?.memberCount,
-            category: entity?.category,
-            university: entity?.university,
-            city: entity?.city,
+            id: entity.id,
+            name: entity.name,
+            email: entity.email,
+            description: entity.description,
+            avatar: entity.avatar,
+            numFollowers: entity.followers.length,
+            memberCount: entity.memberCount,
+            category: entity.category,
+            university: entity.university,
+            city: entity.city,
             founded: entity.founded,
           }
 
@@ -72,28 +73,18 @@ export default function page() {
         router.push("/");
       })
       .catch(err => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         setLoading(false);
       })
   }
 
-    if (loading) {
-      return (
-        <div className="h-[calc(100vh-120px)] w-screen flex justify-center items-center">
-          <Loading/>
-        </div>
-      );
-    }
-
   return (
     <div className="w-full h-[calc(100vh-60px)] flex justify-center items-center bg-gray-100">
       {/* login card */}
       <div className="border-2  shadow-xl bg-white rounded-lg px-4 py-6 w-[400px]">
-        <form className="flex flex-col gap-4" onSubmit={(e: any) => {
-          handleLoginForm(e);
-        }}>
+        <form className="flex flex-col gap-4" onSubmit={handleLoginForm}>
           <input
             required
             className="border-2 rounded-sm px-4 py-2 text-lg"

@@ -20,10 +20,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', (req, res) => {
-  // test route
-  res.send("Hello, This is working!");
-})
+
 
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
@@ -32,6 +29,10 @@ app.use('/api/clubs', clubRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/profile/', profileRoutes);
 app.use('/api/posts', postRoutes);
+
+app.get('/api/hello', (req, res) => {
+  res.send("hello, world");
+});
 
 
 app.listen(PORT, () => {
