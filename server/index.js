@@ -21,6 +21,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/', (req, res) => {
+  // test route
   res.send("Hello, This is working!");
 })
 
