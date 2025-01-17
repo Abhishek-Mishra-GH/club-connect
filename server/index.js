@@ -31,6 +31,7 @@ app.use('/api/profile/', profileRoutes);
 app.use('/api/posts', postRoutes);
 
 app.get('/api/hello', (req, res) => {
+  // test 
   res.send("hello, world");
 });
 
