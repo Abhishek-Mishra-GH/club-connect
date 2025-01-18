@@ -11,7 +11,6 @@
 - Post updates with text and images.
 - Host and manage events.
 - Notify followers about posts via email.
-- Recruit members and streamline communication.
 
 ### For Students
 - Explore and follow university clubs.
