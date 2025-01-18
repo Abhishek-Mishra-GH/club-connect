@@ -80,7 +80,7 @@ export default function ClubsPage() {
             University Clubs
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Discover and join amazing university clubs. Connect with like-minded
+            Discover and follow amazing university clubs. Connect with like-minded
             students and pursue your passions.
           </p>
         </div>
