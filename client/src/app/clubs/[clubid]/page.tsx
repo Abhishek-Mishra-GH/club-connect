@@ -63,6 +63,7 @@ export default function page() {
     const backend = process.env.NEXT_PUBLIC_BACKEND_SERVICE;
     const url = `${backend}/api/clubs/${clubid}/${userid}`;
     const postsRouteUrl = `${backend}/api/posts/${clubid}`;
+    console.log(postsRouteUrl, "posturl")
 
     axios.get(url).then((response) => {
       const cdata = response.data.club;
@@ -82,6 +83,7 @@ export default function page() {
 
       axios.get(postsRouteUrl).then((response) => {
         const pData = response.data;
+        console.log(pData);
         setPosts(pData);
       });
 

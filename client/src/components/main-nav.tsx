@@ -21,7 +21,7 @@ export function MainNav() {
         <div className="mr-4 flex">
           <Link className="mr-6 flex items-center space-x-2" href="/">
             <div className="flex items-center gap-1.5">
-              <img src="clubconnectlogo.png" alt="logo" className="h-9 w-9 rounded-full object-contain"/>
+              <img src="https://clubconnect.blr1.digitaloceanspaces.com/clubconnect-assets/clubconnectlogo.png" className="h-9 w-9 rounded-full object-contain"/>
             <span className="text-lg sm:text-xl font-semibold inline-block"><span className=" text-cyan-600">Club</span>Connect</span>
             </div>
           </Link>
