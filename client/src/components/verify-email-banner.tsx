@@ -26,11 +26,11 @@ export function VerifyEmailBanner() {
   if (!isVisible) return null
 
   return (
-    <div className="bg-cyan-700 h-3">
+    <div className="bg-cyan-700">
       <div className="container mx-auto">
-        <Alert variant="default" className="border-none rounded-none bg-cyan-700 text-primary-foreground">
+        <Alert variant="default" className="border-none rounded-none bg-cyan-700 text-primary-foreground ">
           <div className="flex items-center gap-2 text-sm">
-            <AlertCircle className="h-4 w-4" />
+            <AlertCircle className="h-3 w-3" />
             <AlertDescription className="flex-1">
             Please verify your email. Check your inbox for the verification link and log in again to secure your account.
             </AlertDescription>
@@ -40,7 +40,7 @@ export function VerifyEmailBanner() {
               className="text-primary-foreground hover:text-primary-foreground/80 hover:bg-primary-foreground/10"
               onClick={() => setIsVisible(false)}
             >
-              <X className="h-4 w-4" />
+              <X className="h-3 w-3" />
               <span className="sr-only">Dismiss</span>
             </Button>
           </div>

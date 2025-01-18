@@ -47,7 +47,7 @@ export default function RootLayout({
           </div>
         ) : (
           <div className="flex min-h-screen flex-col">
-            <VerifyEmailBanner />
+            {/* <VerifyEmailBanner /> */}
             <MainNav />
             <main className="flex-1">{children}</main>
             <Footer />
