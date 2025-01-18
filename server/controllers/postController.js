@@ -37,7 +37,7 @@ const getAllPostsController = async (req, res) => {
 };
 
 const getAllPostsByClubIdController = async (req, res) => {
-  const clubId = req.params.cludId;
+  const clubId = req.params.clubId;
 
   try {
     const posts = await getAllPostsByClubId(clubId);

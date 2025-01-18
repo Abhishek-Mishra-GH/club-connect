@@ -8,7 +8,7 @@ const router = express.Router();
 router.post("/create", upload.single("image"), createPostController);
 
 router.get("/", getAllPostsController);
-router.get("/:clubId", getAllPostsByClubIdController)
+router.get("/:clubId", getAllPostsByClubIdController);
 
 // Get posts by clubs followed by the user
 router.get("/followers/:userId", getAllPostsByFollowersController);
