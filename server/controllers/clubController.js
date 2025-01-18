@@ -56,7 +56,7 @@ exports.getClubByIdWithUserFollowing = async (req, res) => {
 }
 
 exports.getClubById = async (req, res) => {
-  const id = req.id;
+  const id = req.params.id;
   try {
     const club = await prisma.club.findUnique({
       where: { id },
