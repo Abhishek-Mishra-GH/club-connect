@@ -71,7 +71,7 @@ const getAllPosts = async () => {
 
 const getAllPostsByClubId = async (clubId) => {
   const posts = await prisma.post.findMany({
-    where: {id: clubId},
+    where: {clubId: clubId},
     orderBy: { createdAt: "desc" },
     include: {
       club: {
