@@ -34,7 +34,7 @@ const testSend = async () => {
 }
 
 const run = async () => {
-  await testSend();
+  await sendVerificationEmails();
 };
 
 run();
