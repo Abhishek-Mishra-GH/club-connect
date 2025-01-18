@@ -3,13 +3,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EventCard } from "@/components/event-card";
 import { Club } from "@/types/club";
-import {
-  Building2,
-  Calendar,
-  Mail,
-  MapPin,
-  Users,
-} from "lucide-react";
+import { Building2, Calendar, Mail, MapPin, Users } from "lucide-react";
 import FollowClubBtn from "@/components/FollowClubBtn";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
@@ -63,7 +57,7 @@ export default function page() {
     const backend = process.env.NEXT_PUBLIC_BACKEND_SERVICE;
     const url = `${backend}/api/clubs/${clubid}/${userid}`;
     const postsRouteUrl = `${backend}/api/posts/${clubid}`;
-    console.log(postsRouteUrl, "posturl")
+    console.log(postsRouteUrl, "posturl");
 
     axios.get(url).then((response) => {
       const cdata = response.data.club;
@@ -83,8 +77,9 @@ export default function page() {
 
       axios.get(postsRouteUrl).then((response) => {
         const pData = response.data;
-        console.log(pData);
-        setPosts(pData);
+        if(pData.length !== 0) {
+          setPosts(pData);
+        }
       });
 
       const backendEvents = response.data.events;
@@ -92,7 +87,11 @@ export default function page() {
         mapBackendToFrontendEvent(backendEvent)
       );
 
-      setEvents(eventsData);
+      console.log(eventsData.length, "ejlkfja event data", eventsData)
+      if(eventsData.length !== 0) {
+        setEvents(eventsData);
+      }
+      
 
       setFollowing(response.data.followed);
     });
@@ -188,26 +187,17 @@ export default function page() {
 
           {/* Content Area */}
           <div className="md:col-span-2">
-            <Tabs defaultValue="events" className="space-y-6">
+            <Tabs defaultValue="posts" className="space-y-6">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="events">
-                  <Calendar className="mr-2 h-4 w-4" />
-                  Events
-                </TabsTrigger>
                 <TabsTrigger value="posts">
                   <Users className="mr-2 h-4 w-4" />
                   Posts
                 </TabsTrigger>
+                <TabsTrigger value="events">
+                  <Calendar className="mr-2 h-4 w-4" />
+                  Events
+                </TabsTrigger>
               </TabsList>
-
-              <TabsContent value="events">
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {events &&
-                    events.map((event: any) => (
-                      <EventCard key={event.id} event={event} />
-                    ))}
-                </div>
-              </TabsContent>
 
               <TabsContent value="posts" className="space-y-4">
                 {posts ? (
@@ -219,6 +209,21 @@ export default function page() {
                     </CardContent>
                   </Card>
                 )}
+              </TabsContent>
+
+              <TabsContent value="events">
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {events ?
+                    (events.map((event: any) => (
+                      <EventCard key={event.id} event={event} />
+                    ))) : (
+                      <Card>
+                        <CardContent className="text-center py-6">
+                          <p className="text-muted-foreground">No events yet</p>
+                        </CardContent>
+                      </Card>
+                  )}
+                </div>
               </TabsContent>
             </Tabs>
           </div>
