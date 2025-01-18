@@ -1,14 +1,28 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { AlertCircle, X } from 'lucide-react'
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
+import axios from "axios"
 
 export function VerifyEmailBanner() {
   const [isVisible, setIsVisible] = useState(false);
 
-  // get axios req
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("userdata") as string);
+    const club = JSON.parse(localStorage.getItem("clubdata") as string);
+    const entity = user || club
+
+    if(entity) {
+      const isVerified = entity.isVerified;
+      if(!isVerified) {
+        setIsVisible(true);
+      }
+    }
+
+  }, []);
+
 
   if (!isVisible) return null
 

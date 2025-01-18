@@ -1,6 +1,7 @@
 const prisma = require("../prisma/prisma");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { generateVerificationToken } = require('../services/authEmailService')
 
 // register club
 exports.registerClub = async (req, res) => {
@@ -26,6 +27,8 @@ exports.registerClub = async (req, res) => {
         password: hashedPassword,
       },
     });
+
+    generateVerificationToken("club", club.id, club.email);
 
     res.status(201).json({ message: "Club registered successfully", club });
   } catch (err) {
@@ -106,6 +109,8 @@ exports.register = async (req, res) => {
         password: hashedPassword,
       },
     });
+
+    generateVerificationToken("user", user.id, user.email);
 
     res.status(201).json({ message: "User registered successfully", user });
   } catch (error) {

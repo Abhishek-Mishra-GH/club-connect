@@ -42,7 +42,8 @@ export default function page() {
             email: entity.email,
             avatar: entity.avatar,
             university: entity.university,
-            city: entity.city
+            city: entity.city,
+            isVerified: entity.isVerified
           };
 
           setUser(userData);
@@ -63,6 +64,7 @@ export default function page() {
             university: entity.university,
             city: entity.city,
             founded: entity.founded,
+            isVerified: entity.isVerified
           }
 
           setClub(clubData);
