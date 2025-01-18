@@ -6,7 +6,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 
 export function VerifyEmailBanner() {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("userdata") as string);
@@ -15,8 +15,8 @@ export function VerifyEmailBanner() {
 
     if(entity) {
       const isVerified = entity.isVerified;
-      if(!isVerified) {
-        setIsVisible(true);
+      if(isVerified) {
+        setIsVisible(false);
       }
     }
 
