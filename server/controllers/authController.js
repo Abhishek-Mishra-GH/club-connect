@@ -28,7 +28,7 @@ exports.registerClub = async (req, res) => {
       },
     });
 
-    generateVerificationToken("club", club.id, club.email);
+    // generateVerificationToken("club", club.id, club.email);
 
     res.status(201).json({ message: "Club registered successfully", club });
   } catch (err) {
@@ -110,7 +110,7 @@ exports.register = async (req, res) => {
       },
     });
 
-    generateVerificationToken("user", user.id, user.email);
+    // generateVerificationToken("user", user.id, user.email);
 
     res.status(201).json({ message: "User registered successfully", user });
   } catch (error) {

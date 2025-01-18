@@ -20,6 +20,7 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
+
 app.use((req, res, next) => {
   console.log(`Incoming request to ${req.url}`);
   next();
