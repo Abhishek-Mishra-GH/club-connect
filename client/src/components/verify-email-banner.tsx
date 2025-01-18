@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { AlertCircle, X } from 'lucide-react'
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
-import axios from "axios"
 
 export function VerifyEmailBanner() {
   const [isVisible, setIsVisible] = useState(false);
