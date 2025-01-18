@@ -15,8 +15,8 @@ const generateVerificationToken = async (type, id, email) => {
   const verificationUrl = `https://club-connect-five.vercel.app/verify?type=${type}&token=${token}`;
 
   await sendEmail(email, "Verify your email", `
-    <p>Thank you for registering with ClubConnect</p>
-    <p>Click <a href="${verificationUrl}">here</a> to verify your account.</p>
+    Thank you for registering with ClubConnect\n
+    Click ${verificationUrl} to verify your account.\n
   `);
 
   return true;

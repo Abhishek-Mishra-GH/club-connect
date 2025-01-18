@@ -10,6 +10,7 @@ import isCurrentUserClub from "@/utils/isCurrentUserClub";
 import { Footer } from "@/components/Footer";
 import Loading from "./loading";
 import { BottomNav } from "@/components/bottom-nav";
+import { VerifyEmailBanner } from "@/components/verify-email-banner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -46,6 +47,7 @@ export default function RootLayout({
           </div>
         ) : (
           <div className="flex min-h-screen flex-col">
+            <VerifyEmailBanner />
             <MainNav />
             <main className="flex-1">{children}</main>
             <Footer />

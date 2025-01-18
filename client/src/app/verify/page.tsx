@@ -5,6 +5,7 @@ import axios from "axios";
 
 const VerifyEmail = () => {
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
@@ -23,9 +24,10 @@ const VerifyEmail = () => {
     };
 
     verify();
+    setLoading(false);
   }, []);
 
-  return <div>{message}</div>;
+  return <div className="w-full h-[100dvh] flex justify-center items-center">{loading ? "Please wait..." : message}</div>;
 };
 
 export default VerifyEmail;
