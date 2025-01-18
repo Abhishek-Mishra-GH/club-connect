@@ -87,7 +87,6 @@ export default function page() {
         mapBackendToFrontendEvent(backendEvent)
       );
 
-      console.log(eventsData.length, "ejlkfja event data", eventsData)
       if(eventsData.length !== 0) {
         setEvents(eventsData);
       }
