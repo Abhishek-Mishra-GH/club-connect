@@ -38,7 +38,7 @@
 - **DigitalOcean Spaces** for file uploads
 
 ### State Management
-- **Zustand**
+- **Jotai**
 
 ---
 
