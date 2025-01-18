@@ -8,34 +8,48 @@ datasource db {
 }
 
 model User {
-  id           String         @id @default(cuid())
-  name         String
-  email        String         @unique
-  password     String
-  avatar       String?
-  city         String
-  university   String
-  Notification Notification[]
-  Registration Registration[]
-  following    Club[]         @relation("UserFollowing")
+  id                String              @id @default(cuid())
+  name              String
+  email             String              @unique
+  isVerified        Boolean             @default(false)
+  password          String
+  avatar            String?
+  city              String
+  university        String
+  Notification      Notification[]
+  Registration      Registration[]
+  following         Club[]              @relation("UserFollowing")
+  VerificationToken VerificationToken[]
 }
 
 model Club {
-  id           String         @id @default(cuid())
-  name         String
-  description  String
-  email        String         @unique
-  password     String
-  category     String
-  founded      Int
-  memberCount  Int
-  university   String
-  city         String
-  avatar       String?
-  events       Event[]
-  Notification Notification[]
-  posts        Post[]
-  followers    User[]         @relation("UserFollowing")
+  id                String              @id @default(cuid())
+  name              String
+  description       String
+  email             String              @unique
+  isVerified        Boolean             @default(false)
+  password          String
+  category          String
+  founded           Int
+  memberCount       Int
+  university        String
+  city              String
+  avatar            String?
+  events            Event[]
+  Notification      Notification[]
+  posts             Post[]
+  followers         User[]              @relation("UserFollowing")
+  VerificationToken VerificationToken[]
+}
+
+model VerificationToken {
+  id        String   @id @default(cuid())
+  userId    String?
+  clubId    String?
+  token     String   @unique
+  expiresAt DateTime
+  user      User?    @relation(fields: [userId], references: [id])
+  club      Club?    @relation(fields: [clubId], references: [id])
 }
 
 model Event {
