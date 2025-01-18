@@ -259,6 +259,7 @@ exports.getEventStats = async (req, res) => {
               select: {
                 id: true,
                 name: true,
+                email: true,
                 city: true,
                 university: true,
               }
