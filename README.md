@@ -10,7 +10,7 @@
 - Create and update club profiles.
 - Post updates with text and images.
 - Host and manage events.
-- Notify followers about posts and events via email and in-app notifications.
+- Notify followers about posts via email.
 - Recruit members and streamline communication.
 
 ### For Students
