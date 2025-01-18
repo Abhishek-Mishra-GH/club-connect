@@ -1,6 +1,6 @@
 const prisma  = require("../prisma/prisma");
 
-const verifyEmail = async (req, res) => {
+exports.verifyEmail = async (req, res) => {
   const { type, token } = req.query;
 
   const verificationToken = await prisma.verificationToken.findUnique({
@@ -28,5 +28,3 @@ const verifyEmail = async (req, res) => {
 
   res.json({ message: "Email successfully verified!" });
 };
-
-module.exports = { verifyEmail };
