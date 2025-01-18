@@ -26,8 +26,8 @@ export function VerifyEmailBanner() {
   if (!isVisible) return null
 
   return (
-    <div className="bg-primary">
-      <div className="container">
+    <div className="bg-cyan-700">
+      <div className="container mx-auto">
         <Alert variant="default" className="border-none rounded-none bg-cyan-700 text-primary-foreground">
           <div className="flex items-center gap-2">
             <AlertCircle className="h-4 w-4" />
