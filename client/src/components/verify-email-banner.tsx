@@ -26,10 +26,10 @@ export function VerifyEmailBanner() {
   if (!isVisible) return null
 
   return (
-    <div className="bg-cyan-700">
+    <div className="bg-cyan-700 h-3">
       <div className="container mx-auto">
         <Alert variant="default" className="border-none rounded-none bg-cyan-700 text-primary-foreground">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 text-sm">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription className="flex-1">
             Please verify your email. Check your inbox for the verification link and log in again to secure your account.
