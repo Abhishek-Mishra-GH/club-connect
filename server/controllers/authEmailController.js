@@ -3,6 +3,10 @@ const prisma  = require("../prisma/prisma");
 exports.verifyEmail = async (req, res) => {
   const { type, token } = req.query;
 
+  if (!token || !type) {
+    return res.status(400).json({ message: "Token or type is missing." });
+  }
+
   const verificationToken = await prisma.verificationToken.findUnique({
     where: { token },
   });

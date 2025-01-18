@@ -11,6 +11,8 @@ const VerifyEmail = () => {
     const queryParams = new URLSearchParams(window.location.search);
     const type = queryParams.get("type");
     const token = queryParams.get("token");
+    console.log(type);
+    console.log(token);
 
     const verify = async () => {
       try {

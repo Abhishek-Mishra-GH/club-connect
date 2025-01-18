@@ -25,17 +25,12 @@ const sendVerificationEmails = async () => {
 };
 
 const testSend = async () => {
-  const user = prisma.user.findUnique({
-    where: {
-      email: "cs.abhishekmo@gmail.com"
-    },
-    select: {
-      email: true,
-    }
-  })
+  const token = "";
+  const verificationToken = await prisma.verificationToken.findUnique({
+    where: { token },
+  });
 
-  await generateVerificationToken("user", user.id, user.email);
-  console.log(`Verification email sent to club: ${user.email}`);
+  console.log(verificationToken)
 }
 
 const run = async () => {
